@@ -8,7 +8,14 @@ div#header { background: #800000; color: #FFFAFA;padding: 1em;}
 div#title { font-size: xx-large; }
 div#subtitle { font-size: large; }
 div#wrapper { width: 100%; }
-div#content { padding: 1em 0; }
-div.song { border-bottom: 1px solid #ccc;}
+div#content { padding: 0 1em; }
+ul.songs { 
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none; }
+li.song { border-bottom: 1px solid #ccc;}
+li.song:hover { background: #ccc; }
+div#footer { padding: 1em; text-align: right; }
+
 
 /* SONGS LIST */

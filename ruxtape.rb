@@ -1,19 +1,43 @@
 #!/usr/bin/env ruby
 
-# might need to install id3lib
-# on Mac sudo port install id3lib
-# sudo env ARCHFLAGS="-arch i386" CONFIGURE_ARGS="--with-opt-dir=/opt/local" gem install id3lib-ruby
-
 $:.unshift File.dirname(__FILE__) + "/lib"
-%w(camping mime/types).each { |lib| require lib}
+%w(camping mime/types mp3info).each { |lib| require lib}
 
 Camping.goes :Ruxtape
+
+module Ruxtape::Models
+  class Song
+    attr_accessor :title, :artist, :length
+    def initialize(path) 
+      @path = path 
+      Mp3Info.open(@path) do |mp3|
+        self.title, self.artist, self.length = mp3.tag.title, mp3.tag.artist, mp3.length
+      end
+    end
+    def self.ruxtape
+      path = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs')
+      songs = []
+      Dir.glob("#{path}/*.mp3").each { |mp3| songs << Song.new(mp3)}
+      return songs
+    end
+    def time
+      minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
+      time = "#{minutes}:#{seconds}"
+      return time
+    end
+  end
+end
 
 module Ruxtape::Controllers
   class Index < R '/'
     def get
-      # grab a list of all files
-      false ? render(:setup) : render(:index)
+      setup = true
+      if setup
+        @songs = Song.ruxtape
+        render :index
+      else
+        render :setup
+      end
     end
   end
 
@@ -52,6 +76,7 @@ module Ruxtape::Views
           div.content! do 
             self << yield
           end
+          div.footer! { "Ruxtape 0.1"}
         end
       end
     end
@@ -59,10 +84,12 @@ module Ruxtape::Views
 
   def index 
     ul.songs do 
-      li.song do 
-        div.name { "The Roots - Live At the T-Connection" }
-        div.clock { }
-        strong "0:48"
+      @songs.each do |song|
+        li.song do 
+          div.name "#{song.artist} - #{song.title}"
+          div.clock { }
+          strong song.time
+        end
       end
     end
   end
