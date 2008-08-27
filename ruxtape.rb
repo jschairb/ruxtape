@@ -5,7 +5,7 @@
 # sudo env ARCHFLAGS="-arch i386" CONFIGURE_ARGS="--with-opt-dir=/opt/local" gem install id3lib-ruby
 
 $:.unshift File.dirname(__FILE__) + "/lib"
-require 'camping'
+%w(camping mime/types).each { |lib| require lib}
 
 Camping.goes :Ruxtape
 
@@ -13,15 +13,23 @@ module Ruxtape::Controllers
   class Index < R '/'
     def get
       # grab a list of all files
-      render :index
+      false ? render(:setup) : render(:index)
     end
   end
 
-  class Style < R '/styles.css'
-    def get
-      @headers['Content-Type'] = 'text/css'
-      %Q[h1 { background: #800000; color: #FFFAFA;padding: 1em;}
-         body {  margin: 0; padding: 0; }]
+  class Static < R '/assets/(.+)'         
+    MIME_TYPES = {'.css' => 'text/css', '.js' => 'text/javascript'}
+    PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public')
+
+    def get(path)
+      @headers['Content-Type'] = MIME_TYPES[path[/\.\w+$/, 0]] || "text/plain"
+      unless path.include? ".." # prevent directory traversal attacks
+        file = "#{PATH}/assets/#{path}"
+        @headers['X-Sendfile'] = "#{PATH}/assets/#{path}"
+      else
+        @status = "403"
+        "403 - Invalid path"
+      end
     end
   end
 
@@ -32,15 +40,36 @@ module Ruxtape::Views
     html do 
       head do 
         title "Ruxtape"
-        style "@import '#{ self / R(Style) }';", :type => 'text/css'
+        link(:rel => 'stylesheet', :type => 'text/css',
+             :href => '/assets/styles.css', :media => 'screen' )
       end
       body do 
-        self << yield
+        div.wrapper! do 
+          div.header! do 
+            div.title! { "Ruxtape, sucka"} 
+            div.subtitle! {"1 songs, 1 min 47 secs"}
+          end
+          div.content! do 
+            self << yield
+          end
+        end
       end
     end
   end
 
   def index 
-    h1 "Ruxtape sucka"
+    ul.songs do 
+      li.song do 
+        div.name { "The Roots - Live At the T-Connection" }
+        div.clock { }
+        strong "0:48"
+      end
+    end
+  end
+
+  def setup
+    h1 "Get Mixin'"
+    p "Create a password for the admin sections."
+    p "TODO: a form goes here."
   end
 end

@@ -1,0 +1,16 @@
+h1. Ruxtape: A Ruby MixTape Implementation
+
+Ruxtape is a clone of "opentape":http://opentape.fm, which pays homage to the original "muxtape":http://muxtape.org.  It is written in Camping and uses JQuery for most of the front end.
+
+h2. Installing
+
+* @sudo gem install camping@
+* @git clone git@github.com:ch0wda/ruxtape.git@
+* @camping@
+
+You will need to have id3lib installed, on Mac OS X simply do @sudo port install id3lib@, then you'll need to install the "id3lib-ruby gem":http://id3lib-ruby.rubyforge.org:
+
+@sudo env ARCHFLAGS="-arch i386" CONFIGURE_ARGS="--with-opt-dir=/opt/local" gem install id3lib-ruby@
+
+
+
