@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$:.unshift File.dirname(__FILE__) + "/lib"
+$:.unshift File.dirname(__FILE__) + "/vendor"
 %w(camping mime/types mp3info).each { |lib| require lib}
 
 Camping.goes :Ruxtape
