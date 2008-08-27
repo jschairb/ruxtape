@@ -7,6 +7,7 @@ Camping.goes :Ruxtape
 
 module Ruxtape::Models
   class Song
+    MP3_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs')
     attr_accessor :title, :artist, :length
     def initialize(path) 
       @path = path 
@@ -15,11 +16,14 @@ module Ruxtape::Models
       end
     end
     def self.ruxtape
-      path = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs')
       songs = []
-      Dir.glob("#{path}/*.mp3").each { |mp3| songs << Song.new(mp3)}
+      Dir.glob("#{MP3_PATH}/*.mp3").each { |mp3| songs << Song.new(mp3) }
       return songs
     end
+
+    def self.ruxtape_song_count; Dir.glob("#{MP3_PATH}/*.mp3").length; end
+    def self.ruxtape_time; "17 min 22 secs"; end
+
     def time
       minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
       time = "#{minutes}:#{seconds}"
@@ -71,12 +75,14 @@ module Ruxtape::Views
         div.wrapper! do 
           div.header! do 
             div.title! { "Ruxtape, sucka"} 
-            div.subtitle! {"1 songs, 1 min 47 secs"}
+            div.subtitle! {"#{Ruxtape::Models::Song.ruxtape_song_count} songs, #{Ruxtape::Models::Song.ruxtape_time}"}
           end
           div.content! do 
             self << yield
           end
-          div.footer! { "Ruxtape 0.1"}
+          div.footer! do 
+            a "Ruxtape 0.1", :href => "http://github.com/ch0wda/ruxtape"
+          end
         end
       end
     end
@@ -87,8 +93,10 @@ module Ruxtape::Views
       @songs.each do |song|
         li.song do 
           div.name "#{song.artist} - #{song.title}"
-          div.clock { }
-          strong song.time
+          div.info do 
+            div.clock { }
+            strong song.time
+          end
         end
       end
     end

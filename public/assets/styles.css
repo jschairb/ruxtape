@@ -2,20 +2,27 @@
 
 * { margin 0; padding: 0; }
 
-body { margin: inherit; }
-
-div#header { background: #800000; color: #FFFAFA;padding: 1em;}
-div#title { font-size: xx-large; }
-div#subtitle { font-size: large; }
+body { 
+    margin: inherit; 
+    font-family: Inconsolata, Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif; 
+    font-size: 24px;
+}
+div#header { 
+    background: #800000; 
+    color: #FFFAFA;
+    padding: 0.5em 1em;
+}
+div#subtitle { font-size: 18px; }
 div#wrapper { width: 100%; }
-div#content { padding: 0 1em; }
 ul.songs { 
     list-style-image:none;
     list-style-position:outside;
-    list-style-type:none; }
-li.song { border-bottom: 1px solid #ccc;}
-li.song:hover { background: #ccc; }
-div#footer { padding: 1em; text-align: right; }
-
-
-/* SONGS LIST */
+    list-style-type:none; 
+    margin: 0; padding: 0;
+}
+li.song { padding: .5em 1em; border-bottom: 1px solid #ccc;}
+li.song:hover { background: #dcdcdc; }
+li.song .name { float; left; }
+li.song .info { float: right; margin-top: -1em;}
+li.song .info strong { font-weight: 400; color: #808080; }
+div#footer { font-size: 18px; padding: 0.5em; text-align: right; }
