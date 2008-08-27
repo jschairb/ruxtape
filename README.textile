@@ -8,9 +8,5 @@ h2. Installing
 * @git clone git@github.com:ch0wda/ruxtape.git@
 * @camping@
 
-You will need to have id3lib installed, on Mac OS X simply do @sudo port install id3lib@, then you'll need to install the "id3lib-ruby gem":http://id3lib-ruby.rubyforge.org:
-
-@sudo env ARCHFLAGS="-arch i386" CONFIGURE_ARGS="--with-opt-dir=/opt/local" gem install id3lib-ruby@
-
 
 
