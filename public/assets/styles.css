@@ -14,6 +14,11 @@ div#header {
 }
 div#subtitle { font-size: 18px; }
 div#wrapper { width: 100%; }
+
+div#content {padding: 0 1em; margin: 1em;}
+div#content h1 { font-size: 32px; margin: 0;}
+div#content p { padding: 0; margin: 0; margin-bottom: .25em; }
+
 ul.songs { 
     list-style-image:none;
     list-style-position:outside;
