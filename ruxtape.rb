@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 $:.unshift File.dirname(__FILE__) + "/vendor"
 $:.unshift File.dirname(__FILE__) + "/lib"
 %w(camping camping_addons fileutils mime/types mp3info yaml openid base64).each { |lib| require lib}
@@ -15,20 +14,13 @@ end
 module Ruxtape::Models
   class Config
     CONFIG_FILE = File.join(File.expand_path(File.dirname(__FILE__)), 'config', 'config.yml')
-    cattr_accessor
     class << self
-      def delete; File.delete(CONFIG_FILE); end
+      def delete; File.delete(CONFIG_FILE); Mixtape.delete; end
       def setup?; return true if File.exist?(CONFIG_FILE) end
       def values; YAML.load_file(CONFIG_FILE); end
       def setup(openid)  
         File.open(CONFIG_FILE, "w") { |f| YAML.dump(openid, f) }
       end
-    end
-  end
-
-  class Destroyer
-    def self.run
-      Config.delete; Song.ruxtape_delete
     end
   end
 
@@ -52,15 +44,25 @@ module Ruxtape::Models
     attr_reader :path
     def initialize(path) 
       @path = path
+      self.filename = File.basename(path)
       Mp3Info.open(path) do |mp3|
         self.title, self.artist, self.length = mp3.tag.title, mp3.tag.artist, mp3.length
       end
     end
 
+    def self.filename_to_path(filename); File.join(Ruxtape::MP3_PATH, filename); end
+
     def time
       minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
       time = "#{minutes}:#{seconds}"
       return time
+    end
+    
+    def update(attrs)
+      Mp3Info.open(self.path) do |mp3|
+        mp3.tag.title = attrs[:title]
+        mp3.tag.artist = attrs[:artist]
+      end
     end
   end
 end
@@ -79,7 +81,7 @@ module Ruxtape::Controllers
 
   class Admin < R '/admin'
     def get
-      return redirect('/setup') unless @state.identity && (@state.identity == Config.values[:openid])
+      return redirect('/setup') unless @state.identity
       @songs = Mixtape.playlist
       render :admin
     end
@@ -116,11 +118,20 @@ module Ruxtape::Controllers
     end
   end
 
-  class Restart < R '/restart'
+  class Restart < R '/admin/restart'
     def post
-      return redirect('/setup') unless @state.identity && (@state.identity == Config.values[:openid])
-      Destroyer.run
-      redirect R(Index)
+      return redirect('/setup') unless @state.identity
+      Config.delete; redirect R(Index)
+    end
+  end
+
+  class UpdateSong < R '/admin/update_song'
+    def post
+      return redirect('/setup') unless @state.identity
+      path = Song.filename_to_path(input.song_filename)
+      @song = Song.new(path)
+      @song.update(:artist => input.song_artist, :title => input.song_title)
+      redirect R(Admin)
     end
   end
 
@@ -136,10 +147,10 @@ module Ruxtape::Controllers
     end
   end
 
-  class Upload < R '/upload'
+  class Upload < R '/admin/upload'
     include FileUtils::Verbose
     def post
-      return redirect('/setup') unless @state.identity && (@state.identity == Config.values[:openid])
+      return redirect('/setup') unless @state.identity
       @file_attrs = { :filename     => input.file[:filename],
                       :content_type => input.file[:type],
                       :content      => input.file[:tempfile] }
@@ -234,10 +245,11 @@ module Ruxtape::Views
   
   def admin
     div.content! do 
+      p.login "You are authenticated as #{@state.identity}"
       h1 "Switch Up Your Tape"
       p 'You can upload another song, rearrange your mix, or blow it all away.'
       hr
-      h2 "Upload a New Song"
+      h2 "Upload a New Jam"
       form({ :method => 'post', :enctype => "multipart/form-data", :action => R(Upload)}) do 
         input :type => "file", :name => "file"; br
         input :type => "submit", :value => "Upload"
@@ -247,7 +259,7 @@ module Ruxtape::Views
       p "Drag and drop to get the optimal soundz. (Saves automatically.)"
       ul.sorter do 
         @songs.each do |song|
-          li.sortable song.title
+          li.sortable { _song_admin(song) }
         end
       end
       hr
@@ -257,5 +269,25 @@ module Ruxtape::Views
         input :type => "submit", :value => "Restart"
       end
     end
+  end
+
+  def _song_admin(song)
+    div.song do 
+      div.info do 
+        text "#{song.artist} - #{song.title}"
+        span.file do 
+          "(#{song.filename})"
+        end
+      end
+      div.form do 
+        form({ :method => 'post', :action => R(UpdateSong)}) do 
+          input :type => "text", :name => "song_artist", :value => song.artist
+          input :type => "text", :name => "song_title", :value => song.title
+          input :type => "hidden", :name => "song_filename", :value => song.filename
+          input :type => "submit", :value => "Update"
+        end
+      end
+    end
+      
   end
 end
