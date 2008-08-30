@@ -79,7 +79,7 @@ module Ruxtape::Controllers
 
   class Admin < R '/admin'
     def get
-      return redirect('/setup') unless @state.identity
+      return redirect('/setup') unless @state.identity && (@state.identity == Config.values[:openid])
       @songs = Mixtape.playlist
       render :admin
     end
@@ -87,8 +87,7 @@ module Ruxtape::Controllers
 
   class Login < R '/login'
     def get
-      return redirect R(Index) unless Config.values[:openid] == input.openid_identifier
-      this_url = 'http' + URL('/login').to_s
+      this_url = 'http:' + URL('/login').to_s
       unless input.finish.to_s == '1'
         begin
           request_state = { }
@@ -105,10 +104,13 @@ module Ruxtape::Controllers
         @state.delete('openid_request')
         case response.status
         when OpenID::Consumer::SUCCESS
+          return redirect R(Setup) unless Config.values[:openid] == response.identity_url.to_s
           @state.identity = response.identity_url.to_s
           return redirect(R(Admin))
         when OpenID::Consumer::FAILURE
           'The OpenID thing doesn\'t think you really are that person, they said: ' + response.message
+        else
+          raise
         end
       end
     end
@@ -116,7 +118,7 @@ module Ruxtape::Controllers
 
   class Restart < R '/restart'
     def post
-      return redirect('/setup') unless @state.identity
+      return redirect('/setup') unless @state.identity && (@state.identity == Config.values[:openid])
       Destroyer.run
       redirect R(Index)
     end
@@ -137,7 +139,7 @@ module Ruxtape::Controllers
   class Upload < R '/upload'
     include FileUtils::Verbose
     def post
-      return redirect('/setup') unless @state.identity
+      return redirect('/setup') unless @state.identity && (@state.identity == Config.values[:openid])
       @file_attrs = { :filename     => input.file[:filename],
                       :content_type => input.file[:type],
                       :content      => input.file[:tempfile] }
