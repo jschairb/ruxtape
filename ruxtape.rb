@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# -*- coding: iso-8859-1 -*-
 $:.unshift File.dirname(__FILE__) + "/vendor"
 $:.unshift File.dirname(__FILE__) + "/lib"
 %w(camping camping_addons fileutils mime/types mp3info yaml openid base64).each { |lib| require lib}
@@ -35,7 +36,14 @@ module Ruxtape::Models
       return songs
     end
     def song_count; Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").length; end
-    def length; "17 min 22 secs"; end  
+    def length 
+      minutes, seconds = 0,0
+      self.playlist.each { |song| time = song.time.split(':'); minutes += time[0].to_i; seconds += time[1].to_i }
+      sec_minutes = (seconds/60).to_i
+      minutes += sec_minutes; seconds =  seconds - (sec_minutes*60)
+      time = "#{minutes}:#{seconds}"
+      return time
+    end  
     end
   end
 
@@ -120,6 +128,7 @@ module Ruxtape::Controllers
 
   class Restart < R '/admin/restart'
     def post
+      return unless signed?
       return redirect('/setup') unless @state.identity
       Config.delete; redirect R(Index)
     end
@@ -150,6 +159,7 @@ module Ruxtape::Controllers
   class Upload < R '/admin/upload'
     include FileUtils::Verbose
     def post
+      return unless signed?
       return redirect('/setup') unless @state.identity
       @file_attrs = { :filename     => input.file[:filename],
                       :content_type => input.file[:type],
@@ -182,6 +192,19 @@ module Ruxtape::Controllers
 
 end
 
+module Ruxtape::Helpers
+  # the following two methods are used to sign url's so XSS attacks are stopped dead
+  # it works because XSS attackers can't read the data in our session.
+  def sign
+    @state.request_signature ||= rand(39_000).to_s(16)
+  end
+  
+  def signed?
+    input.signed == @state.request_signature
+  end
+end
+
+
 module Ruxtape::Views
   def layout
     xhtml_strict do 
@@ -204,6 +227,8 @@ module Ruxtape::Views
           self << yield
           div.footer! do 
             a "Ruxtape 0.1", :href => "http://github.com/ch0wda/ruxtape"
+            text "&nbsp;&raquo;&nbsp;"
+            a "admin", :href => "/admin"
           end
         end
       end
@@ -229,7 +254,7 @@ module Ruxtape::Views
       h1 "Get Mixin'"
       if Ruxtape::Models::Config.setup?
         p { text("You're all set and ready to go. Login below") }
-        form({ :method => 'get', :action => R(Login)}) do 
+        form({ :method => 'get', :action => R(Login, :signed => sign)}) do 
           input :type => "text", :name => "openid_identifier"
           input :type => "submit", :value => "Login OpenID"
         end
@@ -250,13 +275,13 @@ module Ruxtape::Views
       p 'You can upload another song, rearrange your mix, or blow it all away.'
       hr
       h2 "Upload a New Jam"
-      form({ :method => 'post', :enctype => "multipart/form-data", :action => R(Upload)}) do 
+      form({ :method => 'post', :enctype => "multipart/form-data", 
+             :action => R(Upload, :signed => sign)}) do 
         input :type => "file", :name => "file"; br
         input :type => "submit", :value => "Upload"
       end
       hr
-      h2 "Rearrange Your Mixtape Order"
-      p "Drag and drop to get the optimal soundz. (Saves automatically.)"
+      h2 "Edit your songs"
       ul.sorter do 
         @songs.each do |song|
           li.sortable { _song_admin(song) }
@@ -265,7 +290,7 @@ module Ruxtape::Views
       hr
       h2 "Restart"
       p "This will delete all your songs."
-      form({ :method => 'post', :action => R(Restart)}) do 
+      form({ :method => 'post', :action => R(Restart, :signed => sign)}) do 
         input :type => "submit", :value => "Restart"
       end
     end
@@ -280,8 +305,9 @@ module Ruxtape::Views
         end
       end
       div.form do 
-        form({ :method => 'post', :action => R(UpdateSong)}) do 
+        form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
           input :type => "text", :name => "song_artist", :value => song.artist
+          text " - "
           input :type => "text", :name => "song_title", :value => song.title
           input :type => "hidden", :name => "song_filename", :value => song.filename
           input :type => "submit", :value => "Update"
