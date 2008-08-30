@@ -17,15 +17,18 @@ div#wrapper { width: 100%; }
 
 div#content {padding: 0 1em; margin: 1em;}
 div#content h1 { font-size: 32px; margin: 0;}
+div#content h2 { font-size: 24px; margin: 0;}
 div#content p { padding: 0; margin: 0; margin-bottom: .25em; }
-
-ul.songs { 
+ul.songs, ul.sorter { 
     list-style-image:none;
     list-style-position:outside;
     list-style-type:none; 
     margin: 0; padding: 0;
 }
-li.song { padding: .5em 1em; border-bottom: 1px solid #ccc;}
+ul.sorter { cursor: move; }
+li.song, li.sortable { padding: .5em 1em; }
+li.sortable { }
+li.song { border-bottom: 1px solid #ccc; }
 li.song:hover { background: #dcdcdc; }
 li.song .name { float; left; }
 li.song .info { float: right; margin-top: -1em;}
