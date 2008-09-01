@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 $:.unshift File.dirname(__FILE__) + "/vendor"
 $:.unshift File.dirname(__FILE__) + "/lib"
-%w(camping camping_addons fileutils mime/types mp3info yaml openid base64).each { |lib| require lib}
+%w(camping camping_addons builder fileutils 
+   mime/types mp3info yaml openid base64).each { |lib| require lib}
 
 Camping.goes :Ruxtape
 
@@ -26,26 +27,46 @@ module Ruxtape::Models
 
   class Mixtape
     class << self
-    def delete
-      Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").each { |mp3| File.delete(mp3) }
-    end
-    def playlist
-      songs = []
-      Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").each { |mp3| songs << Song.new(mp3) }
-      return songs
-    end
-    def song_count; Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").length; end
-    def length 
+      def delete
+        Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").each { |mp3| File.delete(mp3) }
+      end
+      def playlist
+        songs = []
+        Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").each { |mp3| songs << Song.new(mp3) }
+        return songs
+      end
+      def song_count; Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").length; end
+      def to_xml
+        xml = Builder::XmlMarkup.new
+        xml.instruct!
+        xml.playlist("version" => "0") do 
+          xml.title "Ruxtape"
+          xml.creator "Ruxtape 0.1"
+          xml.info "http://ruxtape.grokblok.com"
+          xml.info "http://ruxtape.grokblok.com"
+          xml.tracklist do 
+            self.playlist.each do |song|
+              xml.track do 
+                xml.location "http://ruxtape.grokblok.com/songs/"
+                xml.meta("rel" => "type") { "mp3"}
+                xml.title "#{song.artist} - #{song.title}"
+                xml.info "http://ruxtape.grokblok.com"
+              end
+            end
+          end
+        end
+      end
+      def length 
       minutes, seconds = 0,0
-      self.playlist.each { |song| time = song.time.split(':'); minutes += time[0].to_i; seconds += time[1].to_i }
-      sec_minutes = (seconds/60).to_i
-      minutes += sec_minutes; seconds =  seconds - (sec_minutes*60)
-      time = "#{minutes}:#{seconds}"
-      return time
-    end  
+        self.playlist.each { |song| time = song.time.split(':'); minutes += time[0].to_i; seconds += time[1].to_i }
+        sec_minutes = (seconds/60).to_i
+        minutes += sec_minutes; seconds =  seconds - (sec_minutes*60)
+        time = "#{minutes}:#{seconds}"
+        return time
+      end  
     end
   end
-
+  
   class Song
     attr_accessor :title, :artist, :length, :filename
     attr_reader :path
@@ -85,6 +106,13 @@ module Ruxtape::Controllers
       else 
         render(:setup)
       end
+    end
+  end
+
+  class Playlist < R '/xspf.xml'
+    def get
+      @headers['Content-Type'] = 'application/xml'
+      "#{Mixtape.to_xml}"
     end
   end
 
@@ -228,6 +256,7 @@ module Ruxtape::Views
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
         script(:type => 'text/javascript', :src => '/assets/jquery.metadata.js')
         script(:type => 'text/javascript', :src => '/assets/jquery.media.js')
+        script(:type => 'text/javascript', :src => '/assets/swfobject.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
         unless @songs.nil?
         end
