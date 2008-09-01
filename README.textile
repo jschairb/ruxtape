@@ -1,12 +1,11 @@
 h1. Ruxtape: A Ruby MixTape Implementation
 
-Ruxtape is a clone of "opentape":http://opentape.fm, which pays homage to the original "muxtape":http://muxtape.org.  It is written in Camping and uses JQuery for most of the front end.
+Ruxtape is a clone of "opentape":http://opentape.fm, written with Camping and Jquery.  It currently only authenticates using OpenID.
 
 h2. Installing
 
 * @sudo gem install camping@
 * @git clone git@github.com:ch0wda/ruxtape.git@
-* @camping@
 
-
+h2. Deploying With Phusion Passenger
 

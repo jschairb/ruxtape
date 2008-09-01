@@ -35,8 +35,16 @@ li.song .name { float; left; }
 li.song .info { float: right; margin-top: -1em;}
 li.song .info strong { font-weight: 400; color: #808080; }
 
+div#warning { 
+    border: 7px solid red; 
+    margin: 2em; padding: 1em; 
+    font-size: 18px; font-weight: bold;
+    text-align: center;
+}
 div.song { border: 5px solid #CCCCCC; padding: .25em;}
 div.info {}
 span.file { margin-left: 1em; font-size: 18px; color: #CCCCCC; }
+
+form { display: inline; }
 
 div#footer { font-size: 18px; padding: 0.5em; text-align: right; }

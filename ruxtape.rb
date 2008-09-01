@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# -*- coding: iso-8859-1 -*-
 $:.unshift File.dirname(__FILE__) + "/vendor"
 $:.unshift File.dirname(__FILE__) + "/lib"
 %w(camping camping_addons fileutils mime/types mp3info yaml openid base64).each { |lib| require lib}
@@ -59,6 +58,8 @@ module Ruxtape::Models
     end
 
     def self.filename_to_path(filename); File.join(Ruxtape::MP3_PATH, filename); end
+
+    def delete; File.delete(self.path); end
 
     def time
       minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
@@ -144,6 +145,16 @@ module Ruxtape::Controllers
     end
   end
 
+  class DeleteSong < R '/admin/delete_song'
+    def post
+      return redirect('/setup') unless @state.identity
+      path = Song.filename_to_path(input.song_filename)
+      @song = Song.new(path)
+      @song.delete
+      redirect R(Admin)
+    end
+  end
+
   class Setup < R '/setup'
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
     def post
@@ -175,7 +186,8 @@ module Ruxtape::Controllers
   end
 
   class Static < R '/assets/(.+)'         
-    MIME_TYPES = {'.css' => 'text/css', '.js' => 'text/javascript'}
+    MIME_TYPES = {'.css' => 'text/css', '.js' => 'text/javascript', 
+                  '.swf' => "application/x-shockwave-flash"}
     PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public')
 
     def get(path)
@@ -214,6 +226,8 @@ module Ruxtape::Views
              :href => '/assets/styles.css', :media => 'screen' )
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
+        script(:type => 'text/javascript', :src => '/assets/jquery.metadata.js')
+        script(:type => 'text/javascript', :src => '/assets/jquery.media.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
         unless @songs.nil?
         end
@@ -236,6 +250,7 @@ module Ruxtape::Views
   end
 
   def index 
+    div.warning! {"You do not have javascript enabled, this site will not work without it."}
     ul.songs do 
       @songs.each do |song|
         li.song do 
@@ -245,6 +260,12 @@ module Ruxtape::Views
             strong song.time
           end
         end
+      end
+    end
+    div.openplayer!(:class => "flash_player") do 
+    end
+    if @songs.length > 0
+      script(:type => 'text/javascript') do       
       end
     end
   end
@@ -270,7 +291,10 @@ module Ruxtape::Views
   
   def admin
     div.content! do 
-      p.login "You are authenticated as #{@state.identity}"
+      p.login { 
+        text "You are authenticated as #{@state.identity}. View your "
+        a "Ruxtape", :href => "/"; text "."
+      }
       h1 "Switch Up Your Tape"
       p 'You can upload another song, rearrange your mix, or blow it all away.'
       hr
@@ -311,6 +335,11 @@ module Ruxtape::Views
           input :type => "text", :name => "song_title", :value => song.title
           input :type => "hidden", :name => "song_filename", :value => song.filename
           input :type => "submit", :value => "Update"
+        end
+
+        form.delete({ :method => 'post', :action => R(DeleteSong, :signed => sign)}) do 
+          input :type => "hidden", :name => "song_filename", :value => song.filename
+          input :type => "submit", :value => "Delete"
         end
       end
     end
