@@ -42,15 +42,15 @@ module Ruxtape::Models
         xml.playlist("version" => "0") do 
           xml.title "Ruxtape"
           xml.creator "Ruxtape 0.1"
-          xml.info "http://ruxtape.grokblok.com"
-          xml.info "http://ruxtape.grokblok.com"
+          xml.info "/"
+          xml.info "/"
           xml.tracklist do 
             self.playlist.each do |song|
               xml.track do 
-                xml.location "http://ruxtape.grokblok.com/songs/"
+                xml.location "/songs/#{CGI.escape(File.basename(song.path))}"
                 xml.meta("rel" => "type") { "mp3"}
                 xml.title "#{song.artist} - #{song.title}"
-                xml.info "http://ruxtape.grokblok.com"
+                xml.info "/"
               end
             end
           end
@@ -254,12 +254,8 @@ module Ruxtape::Views
              :href => '/assets/styles.css', :media => 'screen' )
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
-        script(:type => 'text/javascript', :src => '/assets/jquery.metadata.js')
-        script(:type => 'text/javascript', :src => '/assets/jquery.media.js')
-        script(:type => 'text/javascript', :src => '/assets/swfobject.js')
+        script(:type => 'text/javascript', :src => '/assets/jquery.flash.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
-        unless @songs.nil?
-        end
       end
       body do 
         div.wrapper! do 

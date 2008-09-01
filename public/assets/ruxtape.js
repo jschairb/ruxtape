@@ -1,14 +1,18 @@
 /* Ruxtape */
 $(document).ready(function(){
     $("#warning").hide(); // shows a warning if javascript isn't enabled
-    $("div#openplayer").media( {
+    $("div#openplayer").flash( {
+        src: '/assets/mediaplayer.swf',
+        width: 0,
+        height: 0,
+        allowscriptaccess: "always",
         flashvars: {
+            type: "xml",
+            shuffle: "false",
+            repeat: "list",
+            file: "http://localhost:3301/xspf.xml"
         }
+        
     });
 
-//    var so = new SWFObject("movie.swf", "mymovie", "400", "100%", "8", "#336699");
-//    so.aaddParam("quality", "low");
-//    so.addParam("wmode", "transparent");
-//    so.addParam("salign", "t");
-//    so.write("flashcontent");
 });
