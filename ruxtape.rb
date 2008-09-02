@@ -40,10 +40,7 @@ module Ruxtape::Models
         xml = Builder::XmlMarkup.new
         xml.instruct!
         xml.playlist("version" => "0") do 
-          xml.title "Ruxtape"
-          xml.creator "Ruxtape 0.1"
-          xml.info "/"
-          xml.info "/"
+          xml.title "Ruxtape"; xml.creator "Ruxtape 0.1";  xml.info "/"; xml.info "/"
           xml.tracklist do 
             self.playlist.each do |song|
               xml.track do 
