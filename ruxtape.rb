@@ -1,8 +1,12 @@
 #!/usr/bin/env ruby
-$:.unshift File.dirname(__FILE__) + "/vendor"
 $:.unshift File.dirname(__FILE__) + "/lib"
-%w(camping camping_addons builder fileutils 
-   mime/types mp3info yaml openid base64).each { |lib| require lib}
+
+Dir.glob(File.join(File.dirname(__FILE__),"/vendor/*")).each do |lib|
+  $:.unshift File.join(lib, "/lib")
+end
+
+%w(camping camping_addons fileutils yaml base64 
+   builder mime/types mp3info openid).each { |lib| require lib}
 
 Camping.goes :Ruxtape
 
@@ -140,7 +144,7 @@ module Ruxtape::Controllers
         @state.delete('openid_request')
         case response.status
         when OpenID::Consumer::SUCCESS
-          return redirect R(Setup) unless Config.values[:openid] == response.identity_url.to_s
+          return redirect(R(Setup)) unless Config.values[:openid] == response.identity_url.to_s
           @state.identity = response.identity_url.to_s
           return redirect(R(Admin))
         when OpenID::Consumer::FAILURE
