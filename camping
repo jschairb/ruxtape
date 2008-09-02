@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+$:.unshift File.join(File.dirname(__FILE__), "vendor", "camping", "bin")
+
+version = ">= 0"
+
+if ARGV.first =~ /^_(.*)_$/ and Gem::Version.correct? $1 then
+  version = $1
+  ARGV.shift
+end
+
+gem 'camping', version
+load 'camping'
