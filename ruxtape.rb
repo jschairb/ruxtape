@@ -176,8 +176,9 @@ module Ruxtape::Controllers
         @state.delete('openid_request')
         case response.status
         when OpenID::Consumer::SUCCESS
-          return redirect(R(Setup)) unless Config.values[:openid] == response.identity_url.to_s
-          @state.identity = response.identity_url.to_s
+          identity = response.identity_url.to_s.sub(/^http:\/\//, '').sub(/\/$/,'')
+          return redirect(R(Setup)) unless Config.values[:openid] == identity
+          @state.identity = identity
           return redirect(R(Admin))
         when OpenID::Consumer::FAILURE
           'The OpenID thing doesn\'t think you really are that person, they said: ' + response.message
