@@ -286,10 +286,15 @@ module Ruxtape::Views
         title "Ruxtape => Punks jump up to get beat down."
         link(:rel => 'stylesheet', :type => 'text/css',
              :href => '/assets/styles.css', :media => 'screen' )
+        link(:rel => 'stylesheet', :type => 'text/css',
+             :href => '/assets/page-player.css', :media => 'screen' )             
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
         script(:type => 'text/javascript', :src => '/assets/jquery.flash.js')
+        script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
+        script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
+        
       end
       body do 
         div.wrapper! do 
@@ -307,26 +312,46 @@ module Ruxtape::Views
       end
     end
   end
+  
 
   def index 
     div.warning! {"You do not have javascript enabled, this site will not work without it."}
-    ul.songs do 
+    ul.playlist do 
       @songs.each do |song|
-        li.song do 
-          div.name "#{song.artist} - #{song.title}"
-          div.info do 
-            div.clock { }
-            strong song.time
+        li do 
+          a :href=>"/songs/#{CGI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
           end
         end
       end
-    end
-    div.openplayer!(:class => "flash_player") do 
-    end
-    if @songs.length > 0
-      script(:type => 'text/javascript') do       
-      end
-    end
+
+#This Gets Dynamically copied 
+#after each link for the fancy controls       
+
+      div :id => 'control-template' do
+        div.controls do
+          div.statusbar do
+            div.loading {} 
+            div.position {}
+          end
+        end
+          div.timing do
+            div :id => 'sm2_timing', :class => 'timing-data' do
+              span.sm2_position do "%s1" end
+              span.sm2_total do "%s2" end
+            end
+          end
+          div.peak do
+            div :class => 'peak-box' do
+              span.l {}
+              span.r {}
+            end
+          end
+        end  
+        div :id =>'spectrum-container', :class => 'spectrum-container' do
+          div :class => 'spectrum-box' do
+            div.spectrum {}
+          end
+        end
   end
 
   def setup
