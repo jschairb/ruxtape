@@ -290,7 +290,6 @@ module Ruxtape::Views
              :href => '/assets/page-player.css', :media => 'screen' )             
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
-        script(:type => 'text/javascript', :src => '/assets/jquery.flash.js')
         script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
         script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
