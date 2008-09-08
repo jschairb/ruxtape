@@ -247,15 +247,17 @@ module Ruxtape::Controllers
     end
   end
 
-  class Static < R '/assets/(.+)'         
-    MIME_TYPES = {'.css' => 'text/css', '.js' => 'text/javascript', 
-                  '.swf' => "application/x-shockwave-flash"}
+  class Static < R '/(assets|songs)/(.+)'
+    MIME_TYPES = {'.css' => 'text/css',
+                  '.js' => 'text/javascript', 
+                  '.swf' => "application/x-shockwave-flash",
+                  '.mp3' => 'audio/mpeg'}
     PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public')
 
-    def get(path)
+    def get(type, path)
       @headers['Content-Type'] = MIME_TYPES[path[/\.\w+$/, 0]] || "text/plain"
       unless path.include? ".." # prevent directory traversal attacks
-        file = "#{PATH}/assets/#{path}"
+        file = "#{PATH}/#{type}/#{path}"
         @headers['X-Sendfile'] = "#{PATH}/assets/#{path}"
       else
         @status = "403"
