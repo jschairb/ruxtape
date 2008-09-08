@@ -258,7 +258,7 @@ module Ruxtape::Controllers
       @headers['Content-Type'] = MIME_TYPES[path[/\.\w+$/, 0]] || "text/plain"
       unless path.include? ".." # prevent directory traversal attacks
         file = "#{PATH}/#{type}/#{path}"
-        @headers['X-Sendfile'] = "#{PATH}/assets/#{path}"
+        @headers['X-Sendfile'] = "#{PATH}/#{type}/#{path}"
       else
         @status = "403"
         "403 - Invalid path"
@@ -337,7 +337,7 @@ module Ruxtape::Views
         end
           div.timing do
             div :id => 'sm2_timing', :class => 'timing-data' do
-              span.sm2_position do "%s1" end
+              span.sm2_position do "%s1 - " end
               span.sm2_total do "%s2" end
             end
           end
