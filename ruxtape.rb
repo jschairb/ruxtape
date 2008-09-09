@@ -310,7 +310,7 @@ module Ruxtape::Views
         div.wrapper! do 
           div.header! do 
             div.title! { "Ruxtape, sucka"} 
-            div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / ( #{Ruxtape::Models::Mixtape.length})"}
+            div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / (#{Ruxtape::Models::Mixtape.length})"}
           end
           self << yield
           div.footer! do 

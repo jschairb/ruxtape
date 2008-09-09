@@ -52,6 +52,7 @@ ul.playlist li {
  font-size:2em;
  color:#3D2C2C;
  padding:0.25em 0.5em 0.25em 0.5em;
+ margin:0 0 1px 0;
  border:none;
  letter-spacing:-1px; /* ZOMG WEB X.0. ;) */
  background-color:#f9f9f9;
