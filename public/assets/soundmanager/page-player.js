@@ -24,10 +24,10 @@ function PagePlayer(oConfigOverride) {
 
   this.config = {
     flashVersion: 8,        // version of Flash to tell SoundManager to use - either 8 or 9. Flash 9 required for peak / spectrum data.
-    usePeakData: false,     // [Flash 9 only] show peak data
+    usePeakData: true,     // [Flash 9 only] show peak data
     useWaveformData: false, // [FLASH 9+ ONLY]: enable sound spectrum (raw waveform data) - WARNING: CPU-INTENSIVE: may set CPUs on fire.
     useEQData: false,       // [FLASH 9+ ONLY]: enable sound EQ (frequency spectrum data) - WARNING: Also CPU-intensive.
-    fillGraph: false,       // [Flash 9 only] draw full lines instead of only top (peak) spectrum points
+    fillGraph: true,       // [Flash 9 only] draw full lines instead of only top (peak) spectrum points
     allowRightClick:true,   // let users right-click MP3 links ("save as...", etc.) or discourage (can't prevent.)
     useThrottling: false,   // try to rate-limit potentially-expensive calls (eg. dragging position around)
     autoStart: false,       // begin playing first sound when page loads

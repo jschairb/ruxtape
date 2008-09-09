@@ -293,9 +293,19 @@ module Ruxtape::Views
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
         script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
-        script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
-        
+# The order of the following js calls is apparently quite critical to proper behaviour.
+        script :type  => 'text/javascript' do "
+          var PP_CONFIG = {
+            flashVersion: 9,
+            usePeakData: true,
+            useWaveformData: false,
+            useEQData: false,
+            useFavIcon: false
+            }
+          " end
+        script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
+        script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end          
       end
       body do 
         div.wrapper! do 
@@ -309,6 +319,34 @@ module Ruxtape::Views
             text "&nbsp;&raquo;&nbsp;"
             a "admin", :href => "/admin"
           end
+          #This Gets Dynamically copied 
+          #after each link for the fancy controls       
+
+                div :id => 'control-template' do
+                  div.controls do
+                    div.statusbar do
+                      div.loading do "" end 
+                      div.position do "" end
+                    end
+                  end
+                  div.timing do
+                    div :id => "sm2_timing", :class => 'timing-data' do 
+                      span.sm2_position do "%s1" end
+                      span.sm2_total do " / %s2" end
+                    end
+                  end
+                  div.peak do
+                      div :class => 'peak-box' do
+                        span :class  => 'l' do {} end
+                        span :class  => 'r' do {} end
+                      end
+                    end   
+                  end
+                  div :id =>'spectrum-container', :class => 'spectrum-container' do
+                    div :class => 'spectrum-box' do
+                      div.spectrum do "" end
+                    end
+                  end
         end
       end
     end
@@ -317,42 +355,13 @@ module Ruxtape::Views
 
   def index 
     div.warning! {"You do not have javascript enabled, this site will not work without it."}
-    ul.playlist do 
+    ul :class  => 'playlist' do 
       @songs.each do |song|
         li do 
           a :href=>"/songs/#{CGI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
           end
         end
       end
-
-#This Gets Dynamically copied 
-#after each link for the fancy controls       
-
-      div :id => 'control-template' do
-        div.controls do
-          div.statusbar do
-            div.loading {} 
-            div.position {}
-          end
-        end
-          div.timing do
-            div :id => 'sm2_timing', :class => 'timing-data' do
-              span.sm2_position do "%s1 - " end
-              span.sm2_total do "%s2" end
-            end
-          end
-          div.peak do
-            div :class => 'peak-box' do
-              span.l {}
-              span.r {}
-            end
-          end
-        end  
-        div :id =>'spectrum-container', :class => 'spectrum-container' do
-          div :class => 'spectrum-box' do
-            div.spectrum {}
-          end
-        end
   end
 
   def setup
