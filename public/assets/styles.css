@@ -11,7 +11,7 @@ div#header {
     background: #800000; 
     color: #FFFAFA;
     padding: 0.5em 1em;
-    margin: 0 0 10px 0;
+    margin: 0 0 1px 0;
 }
 div#subtitle { font-size: 18px; }
 div#wrapper { width: 100%; }
