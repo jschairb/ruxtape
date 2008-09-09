@@ -17,7 +17,7 @@ module Camping
       else
         blob = ''; data = {}
       end
-      
+
       app = self.class.name.gsub(/^(\w+)::.+$/, '\1')
       @state = (data[app] ||= Camping::H[])
       hash_before = blob.hash
@@ -245,7 +245,6 @@ module Ruxtape::Controllers
       end
     end
   end
-
 end
 
 module Ruxtape::Helpers
@@ -291,7 +290,7 @@ module Ruxtape::Views
         div.wrapper! do 
           div.header! do 
             div.title! { "Ruxtape, sucka"} 
-            div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs, #{Ruxtape::Models::Mixtape.length}"}
+            div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / ( #{Ruxtape::Models::Mixtape.length})"}
           end
           self << yield
           div.footer! do 
