@@ -50,8 +50,9 @@ ul.playlist li {
  width:auto;
  height: 80px;
  font-size:2em;
- color:#666;
+ color:#3D2C2C;
  padding:0.25em 0.5em 0.25em 0.5em;
+ margin:0 0 1px 0;
  border:none;
  letter-spacing:-1px; /* ZOMG WEB X.0. ;) */
  background-color:#f9f9f9;
@@ -94,7 +95,7 @@ ul.playlist li.sm2_playing:hover {
 }
 
 ul.playlist li.sm2_paused {
- background-color:#999;
+ background-color:#725151;
 }
 
 ul.playlist li.sm2_playing:hover a,
@@ -131,7 +132,7 @@ ul.playlist.use-peak li .peak {
 }
 
 ul.playlist li.sm2_paused .controls {
- background-color:#666;
+ background-color:#3D2C2C;
 }
 
 ul.playlist li:hover .controls .statusbar {
@@ -188,8 +189,8 @@ ul.playlist li .controls .statusbar .position {
 }
 
 ul.playlist li.sm2_paused .controls .statusbar .position {
- background-color:#666;
- border-color:#666;
+ background-color:#3D2C2C;
+ border-color:#3D2C2C;
 }
 
 ul.playlist li .controls .statusbar .loading {
@@ -253,7 +254,7 @@ ul.playlist li.sm2_paused .timing .sm2_position {
 
 ul.playlist li.sm2_paused .timing,
 ul.playlist.use-peak li.sm2_paused .peak {
- background-color:#888;
+ background-color:#3D2C2C;
  border:1px solid #ccc;
 }
 
@@ -352,7 +353,7 @@ ul.playlist li ul li:hover {
  opacity:1;
  background-color:#fff;
  border-color:#ccc;
- color:#666;
+ color:#3D2C2C;
 }
 
 ul.playlist li.sm2_playing ul li,
@@ -368,7 +369,7 @@ ul.playlist li.sm2_playing ul li:hover {
 }
 
 ul.playlist li.sm2_paused ul li:hover {
- background-color:#888;
+ background-color:#3D2C2C;
 }
 
 /* metadata */
@@ -391,7 +392,7 @@ ul.playlist li .controls .statusbar .annotation {
  position:absolute;
  background-color:transparent;
  top:0px;
- color:#666;
+ color:#3D2C2C;
  text-align:right;
  margin-left:10px;
  height:0.5em;
@@ -405,7 +406,7 @@ ul.playlist li .controls .statusbar .annotation span.bubble {
  /* using &middot; */
  display:inline-block;
  background-color:#fff;
- border:1px solid #666;
+ border:1px solid #3D2C2C;
  border-radius:6px;
  -moz-border-radius:6px;
  -webkit-border-radius:6px;
@@ -447,7 +448,7 @@ ul.playlist li .note {
  font-size:x-small;
  padding:2px 4px 2px 4px;
  width:auto;
- color:#666;
+ color:#3D2C2C;
  background-color:#fff;
  border:1px solid #ccc;
  border-radius:6px;
