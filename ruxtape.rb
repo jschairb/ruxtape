@@ -3,7 +3,7 @@ Dir.glob(File.join(File.dirname(__FILE__),"/vendor/*")).each do |lib|
   $:.unshift File.join(lib, "/lib")
 end
 
-%w(camping fileutils yaml base64 
+%w(camping fileutils yaml base64 uri
    builder mime/types mp3info openid).each { |lib| require lib}
 
 module Camping
@@ -321,47 +321,45 @@ module Ruxtape::Views
           end
           #This Gets Dynamically copied 
           #after each link for the fancy controls       
-
-                div :id => 'control-template' do
-                  div.controls do
-                    div.statusbar do
-                      div.loading do "" end 
+          div :id => 'control-template' do
+            div.controls do
+              div.statusbar do
+                div.loading do "" end 
                       div.position do "" end
-                    end
-                  end
-                  div.timing do
-                    div :id => "sm2_timing", :class => 'timing-data' do 
-                      span.sm2_position do "%s1" end
-                      span.sm2_total do " / %s2" end
-                    end
-                  end
-                  div.peak do
-                      div :class => 'peak-box' do
-                        span :class  => 'l' do {} end
-                        span :class  => 'r' do {} end
-                      end
-                    end   
-                  end
-                  div :id =>'spectrum-container', :class => 'spectrum-container' do
-                    div :class => 'spectrum-box' do
-                      div.spectrum do "" end
-                    end
-                  end
+              end
+            end
+            div.timing do
+              div :id => "sm2_timing", :class => 'timing-data' do 
+                span.sm2_position do "%s1" end
+                span.sm2_total do " / %s2" end
+              end
+            end
+            div.peak do
+              div :class => 'peak-box' do
+                span :class  => 'l' do {} end
+                span :class  => 'r' do {} end
+              end
+            end   
+          end
+          div :id =>'spectrum-container', :class => 'spectrum-container' do
+            div :class => 'spectrum-box' do
+              div.spectrum do "" end
+            end
+          end
         end
       end
     end
   end
-  
 
   def index 
     div.warning! {"You do not have javascript enabled, this site will not work without it."}
     ul :class  => 'playlist' do 
       @songs.each do |song|
         li do 
-          a :href=>"/songs/#{CGI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
-          end
+          a("#{song.artist} - #{song.title}", :href=>"/songs/#{URI.encode(File.basename(song.path))}")
         end
       end
+    end
   end
 
   def setup
