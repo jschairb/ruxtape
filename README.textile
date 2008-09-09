@@ -5,11 +5,15 @@ Ruxtape is a clone of "opentape":http://opentape.fm, written with Camping and Jq
 h2. Installing
 
 @sudo gem install camping
-git clone git@github.com:ch0wda/ruxtape.git@
+git clone git\@github.com:ch0wda/ruxtape.git@
 
 h2. Deploying
 
+Ruxtape has a sample rack adapter included to make deployment quite simple.  Of course, it comes with it's own Camping Server so you can simply type @./camping .@ from the root directory and Ruxtape will be available on port 3000.  You can also copy @examples/example.config.ru@ to the root directory and use anything that Rack supports.  The included rack config file words wonderfully with Phusion Passenger.  Deployment should be as simple as copying the Rack config file from
 
+h2. Troubleshooting
+
+If you are having trouble with file uploads, the first thing to check is to make sure that your directory is writable by the process that your web server runs as.
 
 h2. Contributors
 

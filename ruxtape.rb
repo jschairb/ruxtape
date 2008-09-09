@@ -3,47 +3,47 @@ Dir.glob(File.join(File.dirname(__FILE__),"/vendor/*")).each do |lib|
   $:.unshift File.join(lib, "/lib")
 end
 
-%w(camping fileutils yaml base64 uri
+%w(camping camping/session fileutils yaml base64 uri
    builder mime/types mp3info openid).each { |lib| require lib}
 
 module Camping
-  module CookieSessions
-    def service(*a)
-      if @cookies.identity
-        blob, secure_hash = @cookies.identity.to_s.split(':', 2)
-        blob = Base64.decode64(blob)
-        data = Marshal.restore(blob)
-        data = {} unless secure_blob_hasher(blob).strip.downcase == secure_hash.strip.downcase
-      else
-        blob = ''; data = {}
-      end
+#   module CookieSessions
+#     def service(*a)
+#       if @cookies.identity
+#         blob, secure_hash = @cookies.identity.to_s.split(':', 2)
+#         blob = Base64.decode64(blob)
+#         data = Marshal.restore(blob)
+#         data = {} unless secure_blob_hasher(blob).strip.downcase == secure_hash.strip.downcase
+#       else
+#         blob = ''; data = {}
+#       end
 
-      app = self.class.name.gsub(/^(\w+)::.+$/, '\1')
-      @state = (data[app] ||= Camping::H[])
-      hash_before = blob.hash
-      return super(*a)
-    ensure
-      data[app] = @state
-      blob = Marshal.dump(data)
-      unless hash_before == blob.hash
-        secure_hash = secure_blob_hasher(blob)
-        @cookies.identity = Base64.encode64(blob).gsub("\n", '').strip + ':' + secure_hash
-        @headers['Set-Cookie'] = @cookies.map { |k,v| "#{k}=#{C.escape(v)}; path=#{self/"/"}" if v != @k[k] } - [nil]
-      end
-    end
+#       app = self.class.name.gsub(/^(\w+)::.+$/, '\1')
+#       @state = (data[app] ||= Camping::H[])
+#       hash_before = blob.hash
+#       return super(*a)
+#     ensure
+#       data[app] = @state
+#       blob = Marshal.dump(data)
+#       unless hash_before == blob.hash
+#         secure_hash = secure_blob_hasher(blob)
+#         @cookies.identity = Base64.encode64(blob).gsub("\n", '').strip + ':' + secure_hash
+#         @headers['Set-Cookie'] = @cookies.map { |k,v| "#{k}=#{C.escape(v)}; path=#{self/"/"}" if v != @k[k] } - [nil]
+#       end
+#     end
     
-    def secure_blob_hasher(data)
-      require 'digest'
-      require 'digest/sha2'
-      Digest::SHA512::hexdigest(self.class.module_eval('@@state_secret') + data)
-    end
-  end
+#     def secure_blob_hasher(data)
+#       require 'digest'
+#       require 'digest/sha2'
+#       Digest::SHA512::hexdigest(self.class.module_eval('@@state_secret') + data)
+#     end
+#   end
 end
 
 Camping.goes :Ruxtape
 
 module Ruxtape
-  include Camping::CookieSessions
+  include Camping::Session
   MP3_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs')
   @@state_secret = "27c9436319ae7c1e760dbd344de08f82b4c7cfcf"
 end
@@ -145,14 +145,14 @@ module Ruxtape::Controllers
 
   class Login < R '/login'
     def get
-      this_url = 'http:' + URL('/login').to_s
+      this_url = URL('/login').to_s
       unless input.finish.to_s == '1'
         begin
           request_state = { }
           oid_request = OpenID::Consumer.new(request_state, nil).begin(input.openid_identifier)
           oid_request.return_to_args['finish'] = '1'
           @state.openid_request = Marshal.dump(request_state)
-          redirect(oid_request.redirect_url('http:' + URL('/').to_s, this_url))
+          redirect(oid_request.redirect_url(URL('/').to_s, this_url))
         rescue OpenID::DiscoveryFailure
           return 'Couldn\'t find an OpenID at that address, are you sure it is one?'
         end
