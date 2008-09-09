@@ -68,46 +68,28 @@ module Ruxtape::Models
       end
       def playlist
         songs = []
-        Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").each { |mp3| songs << Song.new(mp3) }
-        return songs
+        Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3") { |mp3| songs << Song.new(mp3) }
+        songs.sort
       end
       def song_count; Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").length; end
-      def to_xml
-        xml = Builder::XmlMarkup.new
-        xml.instruct!
-        xml.playlist("version" => "0") do 
-          xml.title "Ruxtape"; xml.creator "Ruxtape 0.1";  xml.info "/"; xml.info "/"
-          xml.tracklist do 
-            self.playlist.each do |song|
-              xml.track do 
-                xml.location "/songs/#{CGI.escape(File.basename(song.path))}"
-                xml.meta("rel" => "type") { "mp3"}
-                xml.title "#{song.artist} - #{song.title}"
-                xml.info "/"
-              end
-            end
-          end
-        end
-      end
       def length 
-      minutes, seconds = 0,0
+        minutes, seconds = 0,0
         self.playlist.each { |song| time = song.time.split(':'); minutes += time[0].to_i; seconds += time[1].to_i }
         sec_minutes = (seconds/60).to_i
         minutes += sec_minutes; seconds =  seconds - (sec_minutes*60)
-        time = "#{minutes}:#{seconds}"
-        return time
-      end  
+        "#{minutes}:#{seconds}"
+      end
     end
   end
-  
+
   class Song
-    attr_accessor :title, :artist, :length, :filename
+    attr_accessor :title, :artist, :length, :filename, :tracknum
     attr_reader :path
     def initialize(path) 
       @path = path
       self.filename = File.basename(path)
       Mp3Info.open(path) do |mp3|
-        self.title, self.artist, self.length = mp3.tag.title, mp3.tag.artist, mp3.length
+        self.title, self.artist, self.length, self.tracknum = mp3.tag.title, mp3.tag.artist, mp3.length, mp3.tag.tracknum
       end
     end
 
@@ -117,15 +99,19 @@ module Ruxtape::Models
 
     def time
       minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
-      time = "#{minutes}:#{seconds}"
-      return time
+      "#{minutes}:#{seconds}"
     end
     
     def update(attrs)
       Mp3Info.open(self.path) do |mp3|
-        mp3.tag.title = attrs[:title]
-        mp3.tag.artist = attrs[:artist]
+        mp3.tag.title = attrs[:title] if attrs[:title]
+        mp3.tag.artist = attrs[:artist] if attrs[:artist]
+        mp3.tag.tracknum = attrs[:tracknum] if attrs[:tracknum]
       end
+    end
+
+    def <=>(other)
+      self.tracknum <=> other.tracknum
     end
   end
 end
@@ -234,15 +220,9 @@ module Ruxtape::Controllers
     def post
       return unless signed?
       return redirect('/setup') unless @state.identity
-      @file_attrs = { :filename     => input.file[:filename],
-                      :content_type => input.file[:type],
-                      :content      => input.file[:tempfile] }
-      @path = File.join(Song::Ruxtape::MP3_PATH, @file_attrs[:filename])
-      # This works as well, but reads into memory a second time.
-#       File.open(@path, 'w') do |file|
-#         file << @file_attrs[:content].read
-#       end
-      cp(@file_attrs[:content].path, @path)
+      @path = File.join(Song::Ruxtape::MP3_PATH, input.file[:filename])
+      cp(input.file[:tempfile].path, @path)
+      Song.new(@path).update(:tracknum => Mixtape.song_count)
       redirect R(Admin)
     end
   end
