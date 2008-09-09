@@ -6,14 +6,28 @@ body {
     margin: inherit; 
     font-family: Inconsolata, Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif; 
     font-size: 1em;
+    color:#3F0000;
+}
+a {
+  color:#800000;
+}
+a:visted {
+  color:#800000;
+}
+a:hover {
+  color:#3F0000;
 }
 div#header { 
-    background: #800000; 
+    background: #3F0000; 
     color: #FFFAFA;
-    padding: 0.5em 1em;
+    padding: 0;
     margin: 0 0 1px 0;
+    height:102px;
+    background-image:url('/assets/images/ruxtape_logo.jpg');
+    background-repeat:no-repeat;
 }
-div#subtitle { font-size: 18px; }
+div#title {display:none; width:150px; margin: 0 auto;}
+div#subtitle { margin:auto 0px;padding: 35px 15px 0 0;float:right; font-size: 1.5em; }
 div#wrapper { width: 100%; }
 
 div#content {padding: 0 1em; margin: 1em;}
@@ -48,4 +62,4 @@ span.file { margin-left: 1em; font-size: 18px; color: #CCCCCC; }
 
 form { display: inline; }
 
-div#footer { font-size: 18px; padding: 0.5em; text-align: right; }
+div#footer { font-size: 1em; padding: 0.5em; text-align: right; }
