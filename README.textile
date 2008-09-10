@@ -1,11 +1,18 @@
-h1. Ruxtape: A Ruby MixTape Implementation
+h1. Ruxtape: A Ruby Mixtape
 
-Ruxtape is a clone of "opentape":http://opentape.fm, written with Camping and Jquery.  It currently only authenticates using OpenID.
+Ruxtape is a ruby-based mixtape that allows you to share personal playlists with your friends or family.  You can create playlists for your friends, sharing with them is easy, as they just need to have the link and a flash player in their brower.  It is *not* intended as a way to share music, nor pirate any copyrighted material.  Make sure that you have the copyright owner's permission before sharing your Ruxtape.  It was inspired by "opentape":http://opentape.fm.
+
+h2. Requirements
+
+We've included all the libraries that you should need along with Ruxtape, so you should not have to monkey around with anything except the following items, listed below:
+
+* Ruby >= 1.8.4
+* RubyGems >= 1.1
+* a valid OpenID login
 
 h2. Installing
 
-@sudo gem install camping
-git clone git\@github.com:ch0wda/ruxtape.git@
+
 
 h2. Deploying
 
@@ -13,7 +20,14 @@ Ruxtape has a sample rack adapter included to make deployment quite simple.  Of 
 
 h2. Troubleshooting
 
-If you are having trouble with file uploads, the first thing to check is to make sure that your directory is writable by the process that your web server runs as.
+<dl>
+ <dt>I'm trying to upload files but they aren't appearing.</dt>
+ <dd>Make sure that RUXTAPE_ROOT/public/songs is writable by the process that your web server is running as.</dd>
+</dl>
+
+h2. Contributing
+
+All contributions are welcome, simply fork or clone the "Ruxtape Repository":https://github.com/ch0wda/ruxtape, make your changes and send a pull request.  Our goal is to keep this application simple and so we're focused on keeping the lines of code ~< 400. 
 
 h2. Contributors
 
