@@ -297,12 +297,7 @@ module Ruxtape::Views
     ul :class  => 'playlist' do 
       @songs.each do |song|
         li do 
-<<<<<<< HEAD:ruxtape.rb
-          a("#{song.artist} - #{song.title}", :href=>"/songs/#{URI.escape(File.basename(song.path))}")
-=======
           a :href=>"/songs/#{URI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
-          end
->>>>>>> f95653cee54455410fb9e01f91fab9b3e3d90739:ruxtape.rb
         end
       end
     end
