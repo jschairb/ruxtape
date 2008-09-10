@@ -32,8 +32,8 @@ div#subtitle { margin:auto 0px;padding: 35px 15px 0 0;float:right; font-size: 1.
 div#wrapper { width: 100%; }
 
 div#content {padding: 0 0em; margin: 1em; line-height: 1.6em;}
-div#content h1 { font-size: 32px; margin: 0; padding-top: 0;}
-div#content h2 { font-size: 1.5em; margin:20px 0 10px 0px;}
+div#content h1 { font-size: 32px; margin: 0 0 10px 0; padding-top: 0;}
+div#content h2 { font-size: 1.5em; margin:10px 0 10px 0px;}
 div#content p { padding: 0; margin: 0 0 .25em 0;}
 p.login { text-align: right; font-size: 12px; margin: 0; padding: 0;}
 ul.songs, ul.sorter { 
@@ -52,10 +52,11 @@ li.song .info { float: right; margin-top: -1em;}
 li.song .info strong { font-weight: 400; color: #808080; }
 
 div#warning { 
-    border: 7px solid red; 
+    border: 7px solid #800000; 
     margin: 2em; padding: 1em; 
     font-size: 18px; font-weight: bold;
     text-align: center;
+    color:#800000;
 }
 .warning {
   color:#800000;
@@ -68,7 +69,7 @@ form { display: inline; }
 
 div#footer { float:left; width:90%;font-size: 1em; padding: 1em 0 0 0; text-align: right; }
 div.admin_area {
-  width:950px;
+  width:930px;
   margin:0 auto;
   padding:0;
 }
