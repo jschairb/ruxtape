@@ -186,6 +186,17 @@ module Ruxtape::Controllers
     end
   end
 
+  class Reorder < R '/admin/reorder'
+    def post
+      return "invalid request" unless signed?
+      if input.songs
+        songs = input.songs.map { |filename| Song.new(File.join(Ruxtape::MP3_PATH, filename)) }
+        songs.each_with_index { |song, i| song.update :tracknum => i+1 }
+      end
+      "ok"
+    end
+  end
+
   class Static < R '/(assets|songs)/(.+)'
     MIME_TYPES = {'.css' => 'text/css',
                   '.js' => 'text/javascript', 
@@ -231,6 +242,8 @@ module Ruxtape::Views
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
         script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
+        script(:type => 'text/javascript', :src => '/assets/ui.core.js')
+        script(:type => 'text/javascript', :src => '/assets/ui.sortable.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
 # The order of the following js calls is apparently quite critical to proper behaviour.
         script :type  => 'text/javascript' do "
@@ -353,11 +366,12 @@ module Ruxtape::Views
         end
         div.admin_list do
           h2 "Edit your songs"
-          ul.sorter do 
+          ul.sorter.sorter! do 
             @songs.each do |song|
-              li.sortable { _song_admin(song) }
+              li.sortable(:id => "songs_#{song.filename}")  { _song_admin(song) }
             end
           end
+          span.signature! sign
         end
       end
     end  

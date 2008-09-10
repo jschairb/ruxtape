@@ -123,3 +123,6 @@ input {
   padding:3px;
   margin:3px;
 }
+span#signature {
+  display:none;
+}
