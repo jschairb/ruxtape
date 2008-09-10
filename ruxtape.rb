@@ -243,6 +243,7 @@ module Ruxtape::Views
     xhtml_strict do 
       head do 
         title "Ruxtape => Punks jump up to get beat down."
+        link(:rel => 'shortcut icon', :href => '/assets/images/favicon.ico')
         link(:rel => 'stylesheet', :type => 'text/css',
              :href => '/assets/styles.css', :media => 'screen' )
         link(:rel => 'stylesheet', :type => 'text/css',
