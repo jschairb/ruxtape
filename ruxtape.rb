@@ -74,7 +74,7 @@ module Ruxtape::Models
       Mp3Info.open(self.path) do |mp3|
         mp3.tag.title = attrs[:title] if attrs[:title]
         mp3.tag.artist = attrs[:artist] if attrs[:artist]
-        mp3.tag.tracknum = attrs[:tracknum] if attrs[:tracknum]
+        mp3.tag.tracknum = attrs[:tracknum].to_i if attrs[:tracknum]
       end
     end
     def url_path; "/songs/#{URI.escape(File.basename(path))}"; end
@@ -150,7 +150,7 @@ module Ruxtape::Controllers
       return redirect('/setup') unless @state.identity
       path = Song.filename_to_path(input.song_filename)
       @song = Song.new(path)
-      @song.update(:artist => input.song_artist, :title => input.song_title)
+      @song.update(:artist => input.song_artist, :title => input.song_title, :tracknum => input.song_tracknum)
       redirect R(Admin)
     end
   end
@@ -374,6 +374,8 @@ module Ruxtape::Views
       end
       div.form do 
         form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
+          label 'Track ', :for => 'song_tracknum'
+          input :type => "text", :name => "song_tracknum", :value => song.tracknum, :size => 1
           label 'Artist ', :for => 'song_artist'
           input :type => "text", :name => "song_artist", :value => song.artist
           label 'Song ', :for => 'song_title'
