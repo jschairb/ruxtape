@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Complete project page on Grokblok.com
+desc: ""
+type: :task
+component: Ruxtape
+release: 
+reporter: ch0wda <joshua.schairbaum@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-09-10 19:56:07.110423 Z
+references: []
+
+id: c0265e9fc662224582961840365ed77832ba3169
+log_events: 
+- - 2008-09-10 19:56:08.249158 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""
