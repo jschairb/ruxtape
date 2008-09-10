@@ -5,9 +5,10 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     if ($("#sorter").length > 0) {
-        $("#sorter").sortable({stop: function(e,ui){
-            $.post("/admin/reorder", $("#sorter").sortable("serialize")+"&signed="+$("#signature").text()) 
-        }});
+        $("#sorter").sortable({
+            stop: function(e,ui){
+                $.post("/admin/reorder", 
+                       $("#sorter").sortable("serialize", {expression: /(songs)_(.+)/})+signature()) }});
     }
 });
 
