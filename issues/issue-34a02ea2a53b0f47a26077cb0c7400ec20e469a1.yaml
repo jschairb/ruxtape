@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Create a favicon.ico
+desc: ""
+type: :feature
+component: Ruxtape
+release: 
+reporter: ch0wda <joshua.schairbaum@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-09-10 19:55:11.032471 Z
+references: []
+
+id: 34a02ea2a53b0f47a26077cb0c7400ec20e469a1
+log_events: 
+- - 2008-09-10 19:55:12.675881 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""

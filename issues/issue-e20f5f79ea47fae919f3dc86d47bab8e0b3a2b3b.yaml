@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Have /setup redirect to /login when finished
+desc: ""
+type: :feature
+component: Ruxtape
+release: 
+reporter: ch0wda <joshua.schairbaum@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-09-10 19:25:06.654446 Z
+references: []
+
+id: e20f5f79ea47fae919f3dc86d47bab8e0b3a2b3b
+log_events: 
+- - 2008-09-10 19:25:08.401611 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""

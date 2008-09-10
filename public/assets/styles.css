@@ -27,12 +27,21 @@ div#header {
     background-image:url('/assets/images/ruxtape_logo.jpg');
     background-repeat:no-repeat;
 }
+div.pinstripe {
+  display:block;
+  width:100%;
+  background-color:#3f0000;
+  height:4px;
+  border:0px solid #fff;
+  margin:0 0 0 0px;
+  padding:0;
+}
 div#title {display:none; width:150px; margin: 0 auto;}
 div#subtitle { margin:auto 0px;padding: 35px 15px 0 0;float:right; font-size: 1.5em; }
 div#wrapper { width: 100%; }
 
-div#content {padding: 0 0em; margin: 1em; line-height: 1.6em;}
-div#content h1 { font-size: 32px; margin: 0 0 10px 0; padding-top: 0;}
+div#content {padding: 0 0em; margin: .2em 1em 1em 1em; line-height: 1.6em;}
+div#content h1 { font-size: 32px; margin: 15px 0 10px 0; padding-top: 0;}
 div#content h2 { font-size: 1.5em; margin:16px 0 10px 0px;}
 div#content p { padding: 0; margin: 0 0 .25em 0;}
 p.login { text-align: right; font-size: 12px; margin: 0; padding: 0;}

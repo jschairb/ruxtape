@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Protect against double form uploads
+desc: Make sure to disable buttons on form submit.  Don't let them submit twice.
+type: :bugfix
+component: Ruxtape
+release: 
+reporter: ch0wda <joshua.schairbaum@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-09-10 17:21:15.215843 Z
+references: []
+
+id: f3765ad4d3c27fff96a337881cbc7130e6c8f18e
+log_events: 
+- - 2008-09-10 17:21:17.061430 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""

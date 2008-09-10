@@ -12,6 +12,7 @@ module Ruxtape
   include Camping::Session
   MP3_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs')
   @@state_secret = "27c9436319ae7c1e760dbd344de08f82b4c7cfcf"
+  VERSION = "0.1"
 end
 
 module Ruxtape::Models
@@ -43,6 +44,7 @@ module Ruxtape::Models
         self.playlist.each { |song| time = song.time.split(':'); minutes += time[0].to_i; seconds += time[1].to_i }
         sec_minutes = (seconds/60).to_i
         minutes += sec_minutes; seconds =  seconds - (sec_minutes*60)
+        seconds = "0#{seconds}" if seconds.to_s.size == 1
         "#{minutes}:#{seconds}"
       end
     end
@@ -72,9 +74,10 @@ module Ruxtape::Models
       Mp3Info.open(self.path) do |mp3|
         mp3.tag.title = attrs[:title] if attrs[:title]
         mp3.tag.artist = attrs[:artist] if attrs[:artist]
-        mp3.tag.tracknum = attrs[:tracknum] if attrs[:tracknum]
+        mp3.tag.tracknum = attrs[:tracknum].to_i if attrs[:tracknum]
       end
     end
+    def url_path; "/songs/#{URI.escape(File.basename(path))}"; end
 
     def <=>(other)
       self.tracknum <=> other.tracknum
@@ -134,6 +137,10 @@ module Ruxtape::Controllers
     end
   end
 
+  class Logout < R '/logout'
+    def get; @state.identity = nil; redirect R(Index); end
+  end
+
   class Restart < R '/admin/restart'
     def post
       return unless signed?
@@ -147,7 +154,7 @@ module Ruxtape::Controllers
       return redirect('/setup') unless @state.identity
       path = Song.filename_to_path(input.song_filename)
       @song = Song.new(path)
-      @song.update(:artist => input.song_artist, :title => input.song_title)
+      @song.update(:artist => input.song_artist, :title => input.song_title, :tracknum => input.song_tracknum)
       redirect R(Admin)
     end
   end
@@ -179,7 +186,8 @@ module Ruxtape::Controllers
     def post
       return unless signed?
       return redirect('/setup') unless @state.identity
-      @path = File.join(Song::Ruxtape::MP3_PATH, input.file[:filename])
+      @path = File.join(Ruxtape::MP3_PATH, input.file[:filename])
+      return redirect(R(Admin)) if @path == Ruxtape::MP3_PATH
       cp(input.file[:tempfile].path, @path)
       Song.new(@path).update(:tracknum => Mixtape.song_count)
       redirect R(Admin)
@@ -261,17 +269,20 @@ module Ruxtape::Views
       body do 
         div.wrapper! do 
           div.header! do
-            div.manage_button do a "Manage", :href => "/admin" end
-            div.manage_button do a "Listen", :href => "/" end    
+            if @state.identity
+              div.manage_button do a "Manage", :href => "/admin" end
+              div.manage_button do a "Listen", :href => "/" end    
+            end            
             div.title! { "Ruxtape, sucka"} 
             div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / (#{Ruxtape::Models::Mixtape.length})"}
             
           end
+          div.pinstripe do "" end
           self << yield
           div.footer! do 
-            a "Ruxtape 0.1", :href => "http://github.com/ch0wda/ruxtape"
+            a "Ruxtape #{Ruxtape::VERSION}", :href => "http://github.com/ch0wda/ruxtape"
             text "&nbsp;&raquo;&nbsp;"
-            a "Manage", :href => "/admin"
+            @state.identity ? a("Logout", :href => R(Logout)) : a("Login", :href => "/setup")
           end
           #This Gets Dynamically copied 
           #after each link for the fancy controls       
@@ -310,7 +321,7 @@ module Ruxtape::Views
     ul :class  => 'playlist' do 
       @songs.each do |song|
         li do 
-          a :href=>"/songs/#{URI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
+          a("#{song.artist} - #{song.title}", :href=> song.url_path)
         end
       end
     end
@@ -337,10 +348,7 @@ module Ruxtape::Views
   
   def admin
     div.content! do 
-      p.login { 
-        text "You are authenticated as #{@state.identity}. View your "
-        a "Ruxtape", :href => "/"; text "."
-      }
+      p.login { text "You are authenticated as #{@state.identity}." }
       h1 "Switch Up Your Tape"
       p 'You can upload another song, rearrange your mix, or blow it all away.'
       div.admin_area do
@@ -358,7 +366,7 @@ module Ruxtape::Views
             div.graybox do
               p "This will delete all your songs."
               form({ :method => 'post', :action => R(Restart, :signed => sign)}) do 
-      #        input :type => "image", :src  => "/assets/images/ruxtape_logo.jpg", :value => "Restart", :name  => "submit"
+#             input :type => "image", :src  => "/assets/images/ruxtape_logo.jpg", :value => "Restart", :name  => "submit"
               input :type => "submit", :value => "Restart", :name  => "submit"
               end
             end
@@ -385,6 +393,8 @@ module Ruxtape::Views
       end
       div.form do 
         form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
+          label 'Track ', :for => 'song_tracknum'
+          input :type => "text", :name => "song_tracknum", :value => song.tracknum, :size => 1
           label 'Artist ', :for => 'song_artist'
           input :type => "text", :name => "song_artist", :value => song.artist
           label 'Song ', :for => 'song_title'

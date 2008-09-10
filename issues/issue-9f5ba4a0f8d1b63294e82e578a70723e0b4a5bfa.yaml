@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: OpenID help
+desc: Include some help text and links about what OpenID is and where people can get one.
+type: :feature
+component: Ruxtape
+release: 
+reporter: ch0wda <joshua.schairbaum@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-09-10 18:11:03.623855 Z
+references: []
+
+id: 9f5ba4a0f8d1b63294e82e578a70723e0b4a5bfa
+log_events: 
+- - 2008-09-10 18:11:04.923157 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""
