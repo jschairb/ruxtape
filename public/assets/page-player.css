@@ -64,7 +64,7 @@ ul.playlist li a {
  display:block;
  text-decoration:none;
  font-weight:normal;
- color:#000;
+ color:#3F0000;
  font-size:100%;
  outline:none;
  position:relative;
@@ -95,7 +95,7 @@ ul.playlist li.sm2_playing:hover {
 }
 
 ul.playlist li.sm2_paused {
- background-color:#725151;
+ background-color:#bbb;
 }
 
 ul.playlist li.sm2_playing:hover a,
@@ -132,7 +132,7 @@ ul.playlist.use-peak li .peak {
 }
 
 ul.playlist li.sm2_paused .controls {
- background-color:#3D2C2C;
+ background-color:#ccc;
 }
 
 ul.playlist li:hover .controls .statusbar {
@@ -189,8 +189,8 @@ ul.playlist li .controls .statusbar .position {
 }
 
 ul.playlist li.sm2_paused .controls .statusbar .position {
- background-color:#3D2C2C;
- border-color:#3D2C2C;
+ background-color:#808080;
+ border-color:#808080;
 }
 
 ul.playlist li .controls .statusbar .loading {
@@ -254,8 +254,8 @@ ul.playlist li.sm2_paused .timing .sm2_position {
 
 ul.playlist li.sm2_paused .timing,
 ul.playlist.use-peak li.sm2_paused .peak {
- background-color:#3D2C2C;
- border:1px solid #ccc;
+ background-color:#808080;
+ border:1px solid #fff;
 }
 
 /* peak data */
@@ -369,7 +369,7 @@ ul.playlist li.sm2_playing ul li:hover {
 }
 
 ul.playlist li.sm2_paused ul li:hover {
- background-color:#3D2C2C;
+ background-color:#ccc;
 }
 
 /* metadata */
