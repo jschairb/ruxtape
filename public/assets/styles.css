@@ -33,7 +33,7 @@ div.pinstripe {
   background-color:#3f0000;
   height:4px;
   border:0px solid #fff;
-  margin:0 0 0 0px;
+  margin:0 0 1px 0px;
   padding:0;
 }
 div#title {display:none; width:150px; margin: 0 auto;}
