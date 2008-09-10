@@ -182,8 +182,8 @@ module Ruxtape::Controllers
     def post
       return unless signed?
       return redirect('/setup') unless @state.identity
-      @path = File.join(Song::Ruxtape::MP3_PATH, input.file[:filename])
-      return redirect(R(Admin)) if Song::Ruxtape::MP3_PATH
+      @path = File.join(Ruxtape::MP3_PATH, input.file[:filename])
+      return redirect(R(Admin)) if @path == Ruxtape::MP3_PATH
       cp(input.file[:tempfile].path, @path)
       Song.new(@path).update(:tracknum => Mixtape.song_count)
       redirect R(Admin)
