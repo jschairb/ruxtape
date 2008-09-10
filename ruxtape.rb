@@ -137,6 +137,10 @@ module Ruxtape::Controllers
     end
   end
 
+  class Logout < R '/logout'
+    def get; @state.identity = nil; redirect R(Index); end
+  end
+
   class Restart < R '/admin/restart'
     def post
       return unless signed?
@@ -264,7 +268,7 @@ module Ruxtape::Views
           div.footer! do 
             a "Ruxtape #{Ruxtape::VERSION}", :href => "http://github.com/ch0wda/ruxtape"
             text "&nbsp;&raquo;&nbsp;"
-            a "Login", :href => "/setup"
+            @state.identity ? a("Logout", :href => R(Logout)) : a("Login", :href => "/setup")
           end
           #This Gets Dynamically copied 
           #after each link for the fancy controls       
