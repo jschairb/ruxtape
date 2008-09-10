@@ -3,7 +3,7 @@ Dir.glob(File.join(File.dirname(__FILE__),"/vendor/*")).each do |lib|
   $:.unshift File.join(lib, "/lib")
 end
 
-%w(camping camping/session fileutils yaml base64
+%w(camping camping/session fileutils yaml base64 uri
    builder mime/types mp3info openid).each { |lib| require lib}
 
 Camping.goes :Ruxtape
@@ -197,7 +197,7 @@ module Ruxtape::Controllers
       @headers['Content-Type'] = MIME_TYPES[path[/\.\w+$/, 0]] || "text/plain"
       unless path.include? ".." # prevent directory traversal attacks
         file = "#{PATH}/#{type}/#{path}"
-        @headers['X-Sendfile'] = "#{PATH}/#{type}/#{CGI.unescape(path)}"
+        @headers['X-Sendfile'] = "#{PATH}/#{type}/#{URI.unescape(path)}"
       else
         @status = "403"
         "403 - Invalid path"
@@ -294,7 +294,7 @@ module Ruxtape::Views
     ul :class  => 'playlist' do 
       @songs.each do |song|
         li do 
-          a("#{song.artist} - #{song.title}", :href=>"/songs/#{CGI.escape(File.basename(song.path))}")
+          a("#{song.artist} - #{song.title}", :href=>"/songs/#{URI.escape(File.basename(song.path))}")
         end
       end
     end
