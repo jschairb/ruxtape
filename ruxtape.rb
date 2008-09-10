@@ -308,15 +308,18 @@ module Ruxtape::Views
       end
       body do 
         div.wrapper! do 
-          div.header! do 
+          div.header! do
+            div.manage_button do a "Manage", :href => "/admin" end
+            div.manage_button do a "Listen", :href => "/" end    
             div.title! { "Ruxtape, sucka"} 
             div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / (#{Ruxtape::Models::Mixtape.length})"}
+            
           end
           self << yield
           div.footer! do 
             a "Ruxtape 0.1", :href => "http://github.com/ch0wda/ruxtape"
             text "&nbsp;&raquo;&nbsp;"
-            a "admin", :href => "/admin"
+            a "Manage", :href => "/admin"
           end
           #This Gets Dynamically copied 
           #after each link for the fancy controls       
@@ -357,7 +360,7 @@ module Ruxtape::Views
     ul :class  => 'playlist' do 
       @songs.each do |song|
         li do 
-          a :href=>"/songs/#{CGI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
+          a :href=>"/songs/#{URI.escape(File.basename(song.path))}" do "#{song.artist} - #{song.title}" end
           end
         end
       end
@@ -390,41 +393,50 @@ module Ruxtape::Views
       }
       h1 "Switch Up Your Tape"
       p 'You can upload another song, rearrange your mix, or blow it all away.'
-      hr
-      h2 "Upload a New Jam"
-      form({ :method => 'post', :enctype => "multipart/form-data", 
-             :action => R(Upload, :signed => sign)}) do 
-        input :type => "file", :name => "file"; br
-        input :type => "submit", :value => "Upload"
-      end
-      hr
-      h2 "Edit your songs"
-      ul.sorter do 
-        @songs.each do |song|
-          li.sortable { _song_admin(song) }
+      div.admin_area do
+        div.admin_left do
+          h2 "Upload a New Jam"
+          div.graybox do
+            form({ :method => 'post', :enctype => "multipart/form-data", 
+                   :action => R(Upload, :signed => sign)}) do 
+              input :type => "file", :name => "file", :value  => "Browse"; br
+              input :type => "submit", :value => "Upload"
+            end
+          end
+          div.warning do
+            h2 "Restart"
+            div.graybox do
+              p "This will delete all your songs."
+              form({ :method => 'post', :action => R(Restart, :signed => sign)}) do 
+      #        input :type => "image", :src  => "/assets/images/ruxtape_logo.jpg", :value => "Restart", :name  => "submit"
+              input :type => "submit", :value => "Restart", :name  => "submit"
+              end
+            end
+          end
+        end
+        div.admin_list do
+          h2 "Edit your songs"
+          ul.sorter do 
+            @songs.each do |song|
+              li.sortable { _song_admin(song) }
+            end
+          end
         end
       end
-      hr
-      h2 "Restart"
-      p "This will delete all your songs."
-      form({ :method => 'post', :action => R(Restart, :signed => sign)}) do 
-        input :type => "submit", :value => "Restart"
-      end
-    end
+    end  
   end
 
   def _song_admin(song)
     div.song do 
       div.info do 
-        text "#{song.artist} - #{song.title}"
-        span.file do 
-          "(#{song.filename})"
-        end
+        h3 "#{song.artist} - #{song.title}"
+        h6 "file - (#{song.filename})"
       end
       div.form do 
         form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
+          label 'Artist ', :for => 'song_artist'
           input :type => "text", :name => "song_artist", :value => song.artist
-          text " - "
+          label 'Song ', :for => 'song_title'
           input :type => "text", :name => "song_title", :value => song.title
           input :type => "hidden", :name => "song_filename", :value => song.filename
           input :type => "submit", :value => "Update"
