@@ -264,6 +264,7 @@ module Ruxtape::Views
             div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / (#{Ruxtape::Models::Mixtape.length})"}
             
           end
+          div.pinstripe do "" end
           self << yield
           div.footer! do 
             a "Ruxtape #{Ruxtape::VERSION}", :href => "http://github.com/ch0wda/ruxtape"
@@ -352,7 +353,7 @@ module Ruxtape::Views
             div.graybox do
               p "This will delete all your songs."
               form({ :method => 'post', :action => R(Restart, :signed => sign)}) do 
-      #        input :type => "image", :src  => "/assets/images/ruxtape_logo.jpg", :value => "Restart", :name  => "submit"
+#             input :type => "image", :src  => "/assets/images/ruxtape_logo.jpg", :value => "Restart", :name  => "submit"
               input :type => "submit", :value => "Restart", :name  => "submit"
               end
             end
