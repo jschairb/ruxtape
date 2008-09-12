@@ -2,55 +2,33 @@
 
 * { margin 0; padding: 0; }
 
-body { 
-    margin: inherit; 
-    font-family: Helvetica, Arial, "Geneva", "Tahoma", "Lucida Grande", "Trebuchet MS", sans-serif; 
-    font-size: 1em;
-    color:#3F0000;
-}
-a {
-  color:#800000;
-}
-a:visted {
-  color:#800000;
-}
-a:hover {
-  color:#3F0000;
-}
-div#header {
-    width:100%;
-    background: #3F0000; 
-    color: #FFFAFA;
-    padding: 0;
-    margin: 0 0 1px 0;
-    height:102px;
-    background-image:url('/assets/images/ruxtape_logo.jpg');
-    background-repeat:no-repeat;
-}
-div.pinstripe {
-  display:block;
-  width:100%;
-  background-color:#3f0000;
-  height:4px;
-  border:0px solid #fff;
-  margin:0 0 1px 0px;
-  padding:0;
-}
-div#title {display:none; width:150px; margin: 0 auto;}
-div#subtitle { margin:auto 0px;padding: 35px 15px 0 0;float:right; font-size: 1.5em; }
-div#wrapper { width: 100%; }
+body { margin: inherit; font-family: Helvetica, Arial, "Geneva", "Tahoma", "Lucida Grande", "Trebuchet MS", sans-serif; font-size: 1em; color:#3F0000;}
+a { color:#800000;}
+a:visted { color:#800000;}
+a:hover { color:#3F0000;}
 
-div#content {padding: 0 0em; margin: .2em 1em 1em 1em; line-height: 1.6em;}
-div#content h1 { font-size: 32px; margin: 15px 0 10px 0; padding-top: 0;}
-div#content h2 { font-size: 1.5em; margin:16px 0 10px 0px;}
-div#content p { padding: 0; margin: 0 0 .25em 0;}
-p.login { text-align: right; font-size: 12px; margin: 0; padding: 0;}
-ul.songs, ul.sorter { 
-    list-style-image:none;
-    list-style-position:outside;
-    list-style-type:none; 
-    margin: 0; padding: 0;
-}
+.login { text-align: right; font-size: 12px; margin: 0; padding: 0;}
+#warning { border: 7px solid #800000; margin: 2em; padding: 1em; font-size: 18px; font-weight: bold; text-align: center; color:#800000;}
+.warning { color:#800000;}
+#signature { display:none;}
+.center { text-align:center;}
+.file { margin-left: 1em; font-size: 18px; color: #CCCCCC; }
+form { display: inline; }
+input { padding:3px; margin:0px 0 0 0;}
+
+#header {width:100%; background: #3F0000; color: #FFFAFA; padding: 0; margin: 0 0 1px 0; height:102px; background-image:url('/assets/images/ruxtape_logo.jpg'); background-repeat:no-repeat;}
+.manage_button { float:right; display:block; background-color:#800000; margin:30px 15px 0 0; color: #fff; width:90px; height:40px; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px;}
+.manage_button a { display:block; width:90px; height:35px; text-align:center; color: #fff; font-size: 20px; margin: 9px auto; text-decoration:none;}
+.pinstripe { display:block; width:100%; background-color:#3f0000; height:4px; border:0px solid #fff; margin:0 0 1px 0px; padding:0;}
+#title {display:none; width:150px; margin: 0 auto;}
+#subtitle { margin:auto 0px;padding: 35px 15px 0 0;float:right; font-size: 1.5em; }
+#wrapper { width: 100%; }
+#content {padding: 0 0em; margin: .2em 1em 1em 1em; line-height: 1.6em;}
+#content h1 { font-size: 32px; margin: 15px 0 10px 0; padding-top: 0;}
+#content h2 { font-size: 1.5em; margin:16px 0 10px 0px;}
+#content p { padding: 0; margin: 0 0 .25em 0;}
+
+ul.songs, ul.sorter { list-style-image:none; list-style-position:outside; list-style-type:none; margin: 0; padding: 0;}
 ul.sorter { cursor: move; }
 li.song, li.sortable {position:relative;width:100%;background-color: #eee;padding: 5px; margin:0 0 2px 0; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px; }
 li.sortable { }
@@ -60,161 +38,30 @@ li.song .name { float; left; }
 li.song .info { float: right; margin-top: -1em;}
 li.song .info strong { font-weight: 400; color: #808080; }
 
-div#warning { 
-    border: 7px solid #800000; 
-    margin: 2em; padding: 1em; 
-    font-size: 18px; font-weight: bold;
-    text-align: center;
-    color:#800000;
-}
-.warning {
-  color:#800000;
-}
-span.file { margin-left: 1em; font-size: 18px; color: #CCCCCC; }
+#footer { float:left; width:90%;font-size: 1em; padding: 1em 0 0 0; text-align: right; }
 
-form { display: inline; }
+.admin_area { width:930px; margin:0 auto; padding:0;}
+.graybox { background-color: #eee;padding: 5px; margin:0 0 2px 0; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px;}
+.admin_left { margin: 0 10px 0 0; float:left; width: 250px;}
+.admin_list { margin: 0px 0 0 0; float:left; width: 650px;}
+.song h3 { display:block; width:450px; height:12px; overflow:hidden; padding:5px; margin:0px 0 5px 15px; line-height: 1em;}
+.song h6 { padding:0px; margin:10px; line-height: 1em; color:#808080;}
+.edit_song_controls { display:block; position:absolute; top:5px; right:5px; height: 45px; width:200px; text-align:right;}
+.edit_song { display:block; margin: 0 0 0 90px; padding:0;}
+.edit_song_form { display:none; margin:0; padding:0;}
+.edit_song_button { cursor:pointer;}
+.edit_song_button:hover { text-decoration:underline; color:#800000;}
 
-div#footer { float:left; width:90%;font-size: 1em; padding: 1em 0 0 0; text-align: right; }
-div.admin_area {
-  width:930px;
-  margin:0 auto;
-  padding:0;
-}
-.graybox {
-  background-color: #eee;padding: 5px; margin:0 0 2px 0; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px;
-}
-div.admin_left {
-  margin: 0 10px 0 0;
-  float:left;
-  width: 250px;
-}
-div.admin_list {
-  margin: 0px 0 0 0;
-  float:left;
-  width: 650px;
-}
-div.song h3 {
-  display:block;
-  width:450px;
-  height:12px;
-  overflow:hidden;
-  padding:5px;
-  margin:0px 0 5px 15px;
-  line-height: 1em;
-}
-div.song h6 {
-  padding:0px;
-  margin:10px;
-  line-height: 1em;
-  color:#808080;
-}
-.edit_song_controls {
-  display:block;
-  position:absolute;
-  top:5px;
-  right:5px;
-  height: 45px;
-  width:200px;
-  text-align:right;
-}
-.edit_song{
-  display:block;
-  margin: 0 0 0 90px;
-  padding:0;
-}
-.edit_song_form {
-  display:none;
-  margin:0;
-  padding:0;
-}
-.edit_song_button{
-  cursor:pointer;
-}
-.edit_song_button:hover{
-  text-decoration:underline;
-  color:#800000;
-}
-div.manage_button {
-  float:right;
-  display:block;
-  background-color:#800000;
-  margin:30px 15px 0 0; 
-  color: #fff;
-  width:90px;
-  height:40px;
-  border-radius:6px;
-   -webkit-border-radius:6px;
-   -moz-border-radius:6px;
-}
-div.manage_button a{
-  display:block;
-  width:90px;
-  height:35px;
-  text-align:center;
-  color: #fff;
-  font-size: 20px;
-  margin: 9px auto;
-  text-decoration:none;
-}
-input {
-  padding:3px;
-  margin:0px 0 0 0;
-}
-span#signature {
-  display:none;
-}
-.center {
-  text-align:center;
-}
-button { 
-  display:inline;
-  border:0; 
-  cursor:pointer; 
-  padding:0 10px 2px 0px; 
-  text-align:center;
-  margin:0 15px; 
-  border-radius:4px;
-   -webkit-border-radius:4px;
-   -moz-border-radius:4px;
-}
-button span { 
-  position:relative; 
-  display:block; 
-  white-space:nowrap; 
-  padding:0 0 0 10px; 
-}
-
-/*dark buttons*/
-button.darkBtn {
-  background-color:#3f0000; 
-  font-size:0.9em; 
-}
-button.darkBtn span { 
-  height:20px; 
-  line-height:20px;
-  background-color:#3f0000; 
-  color:#fff; 
-}
-button.darkBtn:hover {
-	background-color:#800000;  
-}
-button.darkBtn:hover span {
-	background-color:#800000;   
-}
+/* buttons */
+button { display:inline; border:0; cursor:pointer; padding:0 10px 2px 0px; text-align:center; margin:0 15px; border-radius:4px; -webkit-border-radius:4px; -moz-border-radius:4px;}
+button span { position:relative; display:block; white-space:nowrap; padding:0 0 0 10px;}
+/* dark buttons*/
+button.darkBtn { background-color:#3f0000; font-size:0.9em;}
+button.darkBtn span { height:20px; line-height:20px; background-color:#3f0000; color:#fff; }
+button.darkBtn:hover { background-color:#800000;}
+button.darkBtn:hover span {	background-color:#800000;}
 /* red buttons */
-button.redBtn {
-  background-color:#800000; 
-  font-size:0.9em; 
-}
-button.redBtn span { 
-  height:20px; 
-  line-height:20px;
-  background-color:#800000; 
-  color:#fff; 
-}
-button.redBtn:hover {
-	background-color:#3f0000;  
-}
-button.redBtn:hover span {
-	background-color:#3f0000;   
-}
+button.redBtn { background-color:#800000; font-size:0.9em;}
+button.redBtn span { height:20px; line-height:20px; background-color:#800000; color:#fff;}
+button.redBtn:hover {	background-color:#3f0000;}
+button.redBtn:hover span { background-color:#3f0000;}
