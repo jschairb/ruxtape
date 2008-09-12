@@ -1,0 +1,11 @@
+quick_fox:
+  id: 1
+  user_id: 1
+  title: News for Today
+  body: The quick fox jumped over the lazy dog.
+    
+quick_dog:
+  id: 2
+  user_id: 2
+  title: News for Tomorrow
+  body: The quick dog jumped over the lazy fox.

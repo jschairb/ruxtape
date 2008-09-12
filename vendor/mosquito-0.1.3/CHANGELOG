@@ -1,0 +1,30 @@
+== 0.1.3 - The little fairy release
+
+* You can use an absolute URL with scheme and all instead of path-only abbreviation
+* You can now assign a URL-encoded payload instead of a hash when doing all requests
+  except of a GET. This to be nice to people building web-service backends.
+* Be nice to the folks that do not use the database or sessions
+* we have @assigns to access the instance variables summoned in the controller 
+* follow_redirect makes use of the feature below, accordingly
+* You can now pass verbatim query string parameters like so
+    get "/blog/archive?page=2"
+  which will be conveniently mixed with other params (and can also be used when doing POSTs!)
+* Rdoc is extremely unfriendly to pluses and stars in Unicode mode. They should be punished.
+* FunctionalTest is now WebTest and UnitTest is now ModelTest, because the ruby sadists said they shall be.
+* We now support proper, infinitely nested and encapsulated parameters
+  * for querystrings
+  * for postvars
+  * and yes, for uploads too
+* On that note, added a Mosquito::MockUpload to quickly simulate an uploaded file. The file will be filled with random text, so roll your own if you need concrete file content.
+* We are Camping 1.5 compatible
+* You can now do 'test "should do this"' and pass a block of assertions.
+* More tests for better coverage of mosquito.rb
+* Cleanup of Rakefile with other options and proper CHANGELOG inclusion:CHANGELOG
+
+== 0.1.2
+
+== 0.1.1
+
+* Added dependencies to Rakefile (active_record, active_support, camping)
+* Added PUT and DELETE methods [cdcarter]
+* Params can be passed when testing GET [cdcarter]
