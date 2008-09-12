@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Re-Login after logout broken
+desc: After logging out of system. The user is no longer able to log back in this has something to do with the changes john made not sure where it's happening, but it seems kind of important.
+type: :bugfix
+component: Ruxtape
+release: 
+reporter: Kris
+status: :unstarted
+disposition: 
+creation_time: 2008-09-12 09:13:43.216760 Z
+references: []
+
+id: 3f907608c34b6e75f4a5058de397c6897cd61514
+log_events: 
+- - 2008-09-12 09:13:46.049014 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""

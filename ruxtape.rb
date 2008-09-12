@@ -254,17 +254,9 @@ module Ruxtape::Views
              :href => '/assets/page-player.css', :media => 'screen' )
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
-        script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
         script(:type => 'text/javascript', :src => '/assets/ui.core.js')
         script(:type => 'text/javascript', :src => '/assets/ui.sortable.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
-
-        # The order of the following js calls is apparently quite critical to proper behaviour.
-        script :type  => 'text/javascript' do
-          "var PP_CONFIG = {flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false,useFavIcon: false}"
-        end
-        script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
-        script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end
       end
       body do
         div.wrapper! do
@@ -289,6 +281,13 @@ module Ruxtape::Views
   end
 
   def index
+    script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
+    # The order of the following js calls is apparently quite critical to proper behaviour.
+    script :type  => 'text/javascript' do
+      "var PP_CONFIG = {flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false,useFavIcon: false}"
+    end
+    script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
+    script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end
     div.warning! {"You do not have javascript enabled, this site will not work without it."}
     ul :class  => 'playlist' do 
       @songs.each do |song|
@@ -322,7 +321,7 @@ module Ruxtape::Views
           div.graybox do
             form({ :method => 'post', :enctype => "multipart/form-data", 
                    :action => R(Upload, :signed => sign)}) do 
-              input :type => "file", :name => "file", :value  => "Browse"; br
+              input :type => "file", :name => "file", :value  => "Browse"
               input :type => "submit", :value => "Upload"
             end
           end
@@ -338,7 +337,7 @@ module Ruxtape::Views
           end
         end
         div.admin_list do
-          h2 "Edit your songs"
+          h2 "Edit Playlist"
           ul.sorter.sorter! do 
             @songs.each do |song|
               li.sortable(:id => "songs_#{song.filename}")  { _song_admin(song) }
@@ -354,22 +353,26 @@ module Ruxtape::Views
     div.song do 
       div.info do 
         h3 "#{song.artist} - #{song.title}"
-        h6 "file - (#{song.filename})"
+        div.edit_song_controls do
+          span.edit_song_button do "Edit Song" end
+          form.delete({ :method => 'post', :action => R(DeleteSong, :signed => sign)}) do 
+            input :type => "hidden", :name => "song_filename", :value => song.filename
+            input :type => "submit", :value => "Delete"
+          end
+        end  
       end
-      div.form do 
-        form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
-          label 'Artist ', :for => 'song_artist'
-          input :type => "text", :name => "song_artist", :value => song.artist
-          label 'Song ', :for => 'song_title'
-          input :type => "text", :name => "song_title", :value => song.title
-          input :type => "hidden", :name => "song_filename", :value => song.filename
-          input :type => "submit", :value => "Update"
-        end
-
-        form.delete({ :method => 'post', :action => R(DeleteSong, :signed => sign)}) do 
-          input :type => "hidden", :name => "song_filename", :value => song.filename
-          input :type => "submit", :value => "Delete"
-        end
+      div.edit_song do
+        div.edit_song_form do
+          h6 "file - (#{song.filename})" 
+          form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
+            label 'Artist ', :for => 'song_artist'
+            input :type => "text", :name => "song_artist", :value => song.artist
+            label 'Song ', :for => 'song_title'
+            input :type => "text", :name => "song_title", :value => song.title
+            input :type => "hidden", :name => "song_filename", :value => song.filename
+            input :type => "submit", :value => "Save"
+          end
+        end  
       end
     end
   end
