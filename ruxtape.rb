@@ -109,6 +109,7 @@ module Ruxtape::Controllers
     def get
       return redirect('/setup') unless @state.identity
       @songs = Mixtape.playlist
+      @configs = Config.values
       render :admin
     end
   end
@@ -177,6 +178,12 @@ module Ruxtape::Controllers
     end
   end
 
+  class UpdateConfig < R '/admin/update_config'
+    def post
+      redirect R(Admin)
+    end
+  end
+
   class Setup < R '/setup'
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
     def post
@@ -206,6 +213,7 @@ module Ruxtape::Controllers
     def post
       return "invalid request" unless signed?
       if input.songs
+        p input.songs
         songs = input.songs.map { |filename| Song.new(File.join(Ruxtape::MP3_PATH, filename)) }
         songs.each_with_index { |song, i| song.update :tracknum => i+1 }
       end
@@ -313,6 +321,16 @@ module Ruxtape::Views
                    :action => R(Upload, :signed => sign)}) do 
               input :type => "file", :name => "file", :value  => "Browse"
               input :type => "submit", :value => "Upload"
+            end
+          end
+          h2 "Configurations"
+          div.graybox do 
+            form({ :method => 'post', :action => R(UpdateConfig, :signed => sign)}) do 
+              @configs.each do |key, value|
+                label "#{key.to_s.capitalize}", :for => "config_#{key}"
+                input :type => "text", :name => "config_#{key}", :value => value
+              end
+              input :type => "submit", :value => "Save"
             end
           end
           div.warning do

@@ -5,7 +5,7 @@ type: :feature
 component: Ruxtape
 release: 
 reporter: ch0wda <joshua.schairbaum@gmail.com>
-status: :unstarted
+status: :in_progress
 disposition: 
 creation_time: 2008-09-10 18:11:47.022475 Z
 references: []
@@ -16,3 +16,7 @@ log_events:
   - ch0wda <joshua.schairbaum@gmail.com>
   - created
   - ""
+- - 2008-09-12 20:36:47.656478 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - changed status from unstarted to in_progress
+  - I'm going to add this to the web interface.

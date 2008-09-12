@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Ensure files/directories are writable
+desc: Run a check before doing an action that makes sure it's going to work
+type: :feature
+component: Ruxtape
+release: 
+reporter: ch0wda <joshua.schairbaum@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2008-09-12 13:48:26.876316 Z
+references: []
+
+id: 6282bb28aa9e2acb8fb4466067891c557115aff7
+log_events: 
+- - 2008-09-12 13:48:27.926005 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""
