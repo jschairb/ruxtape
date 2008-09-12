@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Ability to change tape title
+desc: change the page title / h1 title on the admin page
+type: :feature
+component: Ruxtape
+release: 
+reporter: jxa
+status: :unstarted
+disposition: 
+creation_time: 2008-09-12 04:34:55.167528 Z
+references: []
+
+id: 5a1d33a18d05511b31308a1b208d6b1e873f2aad
+log_events: 
+- - 2008-09-12 04:34:59.391495 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - created
+  - ""
