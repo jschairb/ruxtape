@@ -22,8 +22,16 @@ module Ruxtape::Models
       def delete; File.delete(CONFIG_FILE); Mixtape.delete; end
       def setup?; return true if File.exist?(CONFIG_FILE) end
       def values; YAML.load_file(CONFIG_FILE); end
-      def setup(openid)  
+      def setup(openid)
         File.open(CONFIG_FILE, "w") { |f| YAML.dump(openid, f) }
+      end
+      def admin?(ident)
+        if setup?
+          values[:openid] == ident
+        else
+          setup(ident)
+          true
+        end
       end
     end
   end
@@ -53,7 +61,7 @@ module Ruxtape::Models
   class Song
     attr_accessor :title, :artist, :length, :filename, :tracknum
     attr_reader :path
-    def initialize(path) 
+    def initialize(path)
       @path = path
       self.filename = File.basename(path)
       Mp3Info.open(path) do |mp3|
@@ -108,7 +116,7 @@ module Ruxtape::Controllers
   class Login < R '/login'
     def get
       this_url = URL('/login').to_s
-      unless input.finish.to_s == '1'
+      if input.finish.to_s != '1'
         begin
           request_state = { }
           oid_request = OpenID::Consumer.new(request_state, nil).begin(input.openid_identifier)
@@ -125,7 +133,7 @@ module Ruxtape::Controllers
         case response.status
         when OpenID::Consumer::SUCCESS
           identity = response.identity_url.to_s.sub(/^http:\/\//, '').sub(/\/$/,'')
-          return redirect(R(Setup)) unless Config.values[:openid] == identity
+          return redirect(R(Setup)) unless Config.admin?(identity)
           @state.identity = identity
           return redirect(R(Admin))
         when OpenID::Consumer::FAILURE
@@ -154,7 +162,7 @@ module Ruxtape::Controllers
       return redirect('/setup') unless @state.identity
       path = Song.filename_to_path(input.song_filename)
       @song = Song.new(path)
-      @song.update(:artist => input.song_artist, :title => input.song_title, :tracknum => input.song_tracknum)
+      @song.update(:artist => input.song_artist, :title => input.song_title)
       redirect R(Admin)
     end
   end
@@ -173,8 +181,8 @@ module Ruxtape::Controllers
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
     def post
       unless Config.setup?
-        Config.setup(:openid => input.openid_address)
-        redirect R(Setup)
+        Config.setup(:openid => input.openid_identifier)
+        redirect R(Login, :signed => sign)
       else
         redirect R(Index)
       end
@@ -231,7 +239,6 @@ module Ruxtape::Helpers
   def sign
     @state.request_signature ||= rand(39_000).to_s(16)
   end
-  
   def signed?
     input.signed == @state.request_signature
   end
@@ -240,14 +247,14 @@ end
 
 module Ruxtape::Views
   def layout
-    xhtml_strict do 
-      head do 
+    xhtml_strict do
+      head do
         title "Ruxtape => Punks jump up to get beat down."
         link(:rel => 'shortcut icon', :href => '/assets/images/favicon.ico')
         link(:rel => 'stylesheet', :type => 'text/css',
              :href => '/assets/styles.css', :media => 'screen' )
         link(:rel => 'stylesheet', :type => 'text/css',
-             :href => '/assets/page-player.css', :media => 'screen' )             
+             :href => '/assets/page-player.css', :media => 'screen' )
         meta(:content => 'noindex, nofollow', :name => "robots")
         script(:type => 'text/javascript', :src => '/assets/jquery.js')
         script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
@@ -265,18 +272,17 @@ module Ruxtape::Views
             }
           " end
         script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
-        script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end          
+        script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end
       end
-      body do 
-        div.wrapper! do 
+      body do
+        div.wrapper! do
           div.header! do
             if @state.identity
               div.manage_button do a "Manage", :href => "/admin" end
-              div.manage_button do a "Listen", :href => "/" end    
-            end            
-            div.title! { "Ruxtape, sucka"} 
+              div.manage_button do a "Listen", :href => "/" end
+            end
+            div.title! { "Ruxtape, sucka"}
             div.subtitle! {"#{Ruxtape::Models::Mixtape.song_count} songs / (#{Ruxtape::Models::Mixtape.length})"}
-            
           end
           div.pinstripe do "" end
           self << yield
@@ -286,12 +292,12 @@ module Ruxtape::Views
             @state.identity ? a("Logout", :href => R(Logout)) : a("Login", :href => "/setup")
           end
           #This Gets Dynamically copied 
-          #after each link for the fancy controls       
+          #after each link for the fancy controls
           div :id => 'control-template' do
             div.controls do
               div.statusbar do
-                div.loading do "" end 
-                      div.position do "" end
+                div.loading ''
+                div.position ''
               end
             end
             div.timing do
@@ -305,7 +311,7 @@ module Ruxtape::Views
                 span :class  => 'l' do {} end
                 span :class  => 'r' do {} end
               end
-            end   
+            end
           end
           div :id =>'spectrum-container', :class => 'spectrum-container' do
             div :class => 'spectrum-box' do
@@ -317,7 +323,7 @@ module Ruxtape::Views
     end
   end
 
-  def index 
+  def index
     div.warning! {"You do not have javascript enabled, this site will not work without it."}
     ul :class  => 'playlist' do 
       @songs.each do |song|
@@ -329,24 +335,16 @@ module Ruxtape::Views
   end
 
   def setup
-    div.content! do 
+    div.content! do
       h1 "Get Mixin'"
-      if Ruxtape::Models::Config.setup?
-        p { text("You're all set and ready to go. Login below") }
-        form({ :method => 'get', :action => R(Login, :signed => sign)}) do 
-          input :type => "text", :name => "openid_identifier"
-          input :type => "submit", :value => "Login OpenID"
-        end
-      else
-        p "Type in your OpenID address below to get started."
-        form({ :method => 'post', :action => R(Setup)}) do 
-          input :type => "text", :name => "openid_address"
-          input :type => "submit", :value => "Save"
-        end
+      p "Type in your OpenID address below to get started."
+      form({ :method => 'get', :action => R(Login, :signed => sign)}) do
+        input :type => "text", :name => "openid_identifier"
+        input :type => "submit", :value => "Login"
       end
     end
   end
-  
+
   def admin
     div.content! do 
       p.login { text "You are authenticated as #{@state.identity}." }
@@ -394,8 +392,6 @@ module Ruxtape::Views
       end
       div.form do 
         form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
-          label 'Track ', :for => 'song_tracknum'
-          input :type => "text", :name => "song_tracknum", :value => song.tracknum, :size => 1
           label 'Artist ', :for => 'song_artist'
           input :type => "text", :name => "song_artist", :value => song.artist
           label 'Song ', :for => 'song_title'
@@ -410,6 +406,5 @@ module Ruxtape::Views
         end
       end
     end
-      
   end
 end
