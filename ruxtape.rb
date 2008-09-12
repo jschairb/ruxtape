@@ -23,7 +23,7 @@ module Ruxtape::Models
       def setup?; return true if File.exist?(CONFIG_FILE) end
       def values; YAML.load_file(CONFIG_FILE); end
       def setup(openid)
-        File.open(CONFIG_FILE, "w") { |f| YAML.dump(openid, f) }
+        File.open(CONFIG_FILE, "w") { |f| YAML.dump({:openid => openid}, f) }
       end
       def admin?(ident)
         if setup?
@@ -179,14 +179,6 @@ module Ruxtape::Controllers
 
   class Setup < R '/setup'
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
-    def post
-      unless Config.setup?
-        Config.setup(:openid => input.openid_identifier)
-        redirect R(Login, :signed => sign)
-      else
-        redirect R(Index)
-      end
-    end
   end
 
   class Upload < R '/admin/upload'
