@@ -231,16 +231,10 @@ module Ruxtape::Controllers
 end
 
 module Ruxtape::Helpers
-  # the following two methods are used to sign url's so XSS attacks are stopped dead
-  # it works because XSS attackers can't read the data in our session.
-  def sign
-    @state.request_signature ||= rand(39_000).to_s(16)
-  end
-  def signed?
-    input.signed == @state.request_signature
-  end
+  # used to sign url's to stopXSS attacks
+  def sign; @state.request_signature ||= rand(39_000).to_s(16); end
+  def signed?; input.signed == @state.request_signature; end
 end
-
 
 module Ruxtape::Views
   def layout
@@ -248,15 +242,15 @@ module Ruxtape::Views
       head do
         title "Ruxtape => Punks jump up to get beat down."
         link(:rel => 'shortcut icon', :href => '/assets/images/favicon.ico')
+        
         link(:rel => 'stylesheet', :type => 'text/css',
              :href => '/assets/styles.css', :media => 'screen' )
         link(:rel => 'stylesheet', :type => 'text/css',
              :href => '/assets/page-player.css', :media => 'screen' )
         meta(:content => 'noindex, nofollow', :name => "robots")
-        script(:type => 'text/javascript', :src => '/assets/jquery.js')
-        script(:type => 'text/javascript', :src => '/assets/ui.core.js')
-        script(:type => 'text/javascript', :src => '/assets/ui.sortable.js')
-        script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
+        %w(jquery.js ui.core.js ui.sortable.js ruxtape.js).each do |lib|
+          script(:type => 'text/javascript', :src => "/assets/#{lib}")
+        end
       end
       body do
         div.wrapper! do
@@ -290,11 +284,7 @@ module Ruxtape::Views
     script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end
     div.warning! {"You do not have javascript enabled, this site will not work without it."}
     ul :class  => 'playlist' do 
-      @songs.each do |song|
-        li do 
-          a("#{song.artist} - #{song.title}", :href=> song.url_path)
-        end
-      end
+      @songs.each { |song| li {a("#{song.artist} - #{song.title}", :href=> song.url_path) }}
     end
     _tape_controls
   end
@@ -354,7 +344,7 @@ module Ruxtape::Views
       div.info do 
         h3 "#{song.artist} - #{song.title}"
         div.edit_song_controls do
-          span.edit_song_button do "Edit Song" end
+          span.edit_song_button {"Edit Song"}
           form.delete({ :method => 'post', :action => R(DeleteSong, :signed => sign)}) do 
             input :type => "hidden", :name => "song_filename", :value => song.filename
             input :type => "submit", :value => "Delete"
@@ -378,32 +368,17 @@ module Ruxtape::Views
   end
 
   def _tape_controls
-    #This Gets Dynamically copied 
-    #after each link for the fancy controls
     div :id => 'control-template' do
-      div.controls do
-        div.statusbar do
-          div.loading ''
-          div.position ''
-        end
-      end
+      div.controls { div.statusbar { div.loading ''; div.position ''} }
       div.timing do
         div :id => "sm2_timing", :class => 'timing-data' do 
-          span.sm2_position do "%s1" end
-          span.sm2_total do " / %s2" end
+          span.sm2_position {"%s1"}; span.sm2_total {" / %s2"}
         end
       end
-      div.peak do
-        div :class => 'peak-box' do
-          span :class  => 'l'
-          span :class  => 'r'
-        end
-      end
+      div.peak { div(:class => 'peak-box') { span :class  => 'l'; span :class  => 'r' }}
     end
-    div :id =>'spectrum-container', :class => 'spectrum-container' do
-      div :class => 'spectrum-box' do
-        div.spectrum do "" end
-      end
+    div(:id =>'spectrum-container', :class => 'spectrum-container') do
+      div(:class => 'spectrum-box') { div.spectrum {""} }
     end
   end
 end

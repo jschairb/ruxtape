@@ -6,4 +6,5 @@ public/songs/*.mp3
 config/*
 config.ru
 config/deploy.rb
+tmp/restart.txt
 
