@@ -77,7 +77,7 @@ module Ruxtape::Models
       minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
       "#{minutes}:#{seconds}"
     end
-    
+
     def update(attrs)
       Mp3Info.open(self.path) do |mp3|
         mp3.tag.title = attrs[:title] if attrs[:title]
@@ -214,10 +214,7 @@ module Ruxtape::Controllers
   end
 
   class Static < R '/(assets|songs)/(.+)'
-    MIME_TYPES = {'.css' => 'text/css',
-                  '.js' => 'text/javascript', 
-                  '.swf' => "application/x-shockwave-flash",
-                  '.mp3' => 'audio/mpeg'}
+    MIME_TYPES = {'.css' => 'text/css', '.js' => 'text/javascript', '.swf' => "application/x-shockwave-flash", '.mp3' => 'audio/mpeg'}
     PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'public')
 
     def get(type, path)
@@ -261,16 +258,11 @@ module Ruxtape::Views
         script(:type => 'text/javascript', :src => '/assets/ui.core.js')
         script(:type => 'text/javascript', :src => '/assets/ui.sortable.js')
         script(:type => 'text/javascript', :src => '/assets/ruxtape.js')
-# The order of the following js calls is apparently quite critical to proper behaviour.
-        script :type  => 'text/javascript' do "
-          var PP_CONFIG = {
-            flashVersion: 9,
-            usePeakData: true,
-            useWaveformData: false,
-            useEQData: false,
-            useFavIcon: false
-            }
-          " end
+
+        # The order of the following js calls is apparently quite critical to proper behaviour.
+        script :type  => 'text/javascript' do
+          "var PP_CONFIG = {flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false,useFavIcon: false}"
+        end
         script(:type => 'text/javascript', :src => '/assets/soundmanager/page-player.js')
         script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end
       end
@@ -291,33 +283,6 @@ module Ruxtape::Views
             text "&nbsp;&raquo;&nbsp;"
             @state.identity ? a("Logout", :href => R(Logout)) : a("Login", :href => "/setup")
           end
-          #This Gets Dynamically copied 
-          #after each link for the fancy controls
-          div :id => 'control-template' do
-            div.controls do
-              div.statusbar do
-                div.loading ''
-                div.position ''
-              end
-            end
-            div.timing do
-              div :id => "sm2_timing", :class => 'timing-data' do 
-                span.sm2_position do "%s1" end
-                span.sm2_total do " / %s2" end
-              end
-            end
-            div.peak do
-              div :class => 'peak-box' do
-                span :class  => 'l' do {} end
-                span :class  => 'r' do {} end
-              end
-            end
-          end
-          div :id =>'spectrum-container', :class => 'spectrum-container' do
-            div :class => 'spectrum-box' do
-              div.spectrum do "" end
-            end
-          end
         end
       end
     end
@@ -332,6 +297,7 @@ module Ruxtape::Views
         end
       end
     end
+    _tape_controls
   end
 
   def setup
@@ -404,6 +370,36 @@ module Ruxtape::Views
           input :type => "hidden", :name => "song_filename", :value => song.filename
           input :type => "submit", :value => "Delete"
         end
+      end
+    end
+  end
+
+  def _tape_controls
+    #This Gets Dynamically copied 
+    #after each link for the fancy controls
+    div :id => 'control-template' do
+      div.controls do
+        div.statusbar do
+          div.loading ''
+          div.position ''
+        end
+      end
+      div.timing do
+        div :id => "sm2_timing", :class => 'timing-data' do 
+          span.sm2_position do "%s1" end
+          span.sm2_total do " / %s2" end
+        end
+      end
+      div.peak do
+        div :class => 'peak-box' do
+          span :class  => 'l'
+          span :class  => 'r'
+        end
+      end
+    end
+    div :id =>'spectrum-container', :class => 'spectrum-container' do
+      div :class => 'spectrum-box' do
+        div.spectrum do "" end
       end
     end
   end
