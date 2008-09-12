@@ -284,9 +284,8 @@ module Ruxtape::Views
             @state.identity ? a("Logout", :href => R(Logout)) : a("Login", :href => "/setup")
           end
         end
+        _google_analytics unless (Ruxtape::Models::Config.values[:google] == (nil || "") )
       end
-
-      _google_analytics unless (Ruxtape::Models::Config.values[:google] == (nil || "") )
     end
   end
 
