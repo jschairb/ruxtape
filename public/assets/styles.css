@@ -4,7 +4,7 @@
 
 body { 
     margin: inherit; 
-    font-family: Inconsolata, Helvetica, "Lucida Grande", "Trebuchet MS", sans-serif; 
+    font-family: Helvetica, Arial, "Geneva", "Tahoma", "Lucida Grande", "Trebuchet MS", sans-serif; 
     font-size: 1em;
     color:#3F0000;
 }
@@ -70,8 +70,6 @@ div#warning {
 .warning {
   color:#800000;
 }
-div.song {}
-div.info {}
 span.file { margin-left: 1em; font-size: 18px; color: #CCCCCC; }
 
 form { display: inline; }
@@ -97,7 +95,7 @@ div.admin_list {
 }
 div.song h3 {
   display:block;
-  width:510px;
+  width:450px;
   height:12px;
   overflow:hidden;
   padding:5px;
@@ -114,9 +112,9 @@ div.song h6 {
   display:block;
   position:absolute;
   top:5px;
-  right:0;
+  right:5px;
   height: 45px;
-  width:150px;
+  width:200px;
   text-align:right;
 }
 .edit_song{
@@ -128,6 +126,13 @@ div.song h6 {
   display:none;
   margin:0;
   padding:0;
+}
+.edit_song_button{
+  cursor:pointer;
+}
+.edit_song_button:hover{
+  text-decoration:underline;
+  color:#800000;
 }
 div.manage_button {
   float:right;
@@ -153,8 +158,63 @@ div.manage_button a{
 }
 input {
   padding:3px;
-  margin:3px;
+  margin:0px 0 0 0;
 }
 span#signature {
   display:none;
+}
+.center {
+  text-align:center;
+}
+button { 
+  display:inline;
+  border:0; 
+  cursor:pointer; 
+  padding:0 10px 2px 0px; 
+  text-align:center;
+  margin:0 15px; 
+  border-radius:4px;
+   -webkit-border-radius:4px;
+   -moz-border-radius:4px;
+}
+button span { 
+  position:relative; 
+  display:block; 
+  white-space:nowrap; 
+  padding:0 0 0 10px; 
+}
+
+/*dark buttons*/
+button.darkBtn {
+  background-color:#3f0000; 
+  font-size:0.9em; 
+}
+button.darkBtn span { 
+  height:20px; 
+  line-height:20px;
+  background-color:#3f0000; 
+  color:#fff; 
+}
+button.darkBtn:hover {
+	background-color:#800000;  
+}
+button.darkBtn:hover span {
+	background-color:#800000;   
+}
+/* red buttons */
+button.redBtn {
+  background-color:#800000; 
+  font-size:0.9em; 
+}
+button.redBtn span { 
+  height:20px; 
+  line-height:20px;
+  background-color:#800000; 
+  color:#fff; 
+}
+button.redBtn:hover {
+	background-color:#3f0000;  
+}
+button.redBtn:hover span {
+	background-color:#3f0000;   
 }

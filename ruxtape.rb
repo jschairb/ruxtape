@@ -287,7 +287,7 @@ module Ruxtape::Views
       p "Type in your OpenID address below to get started."
       form({ :method => 'get', :action => R(Login, :signed => sign)}) do
         input :type => "text", :name => "openid_identifier"
-        input :type => "submit", :value => "Login"
+        button :name  => "submit", :class => 'darkBtn' do span 'Login' end
       end
     end
   end
@@ -303,17 +303,16 @@ module Ruxtape::Views
           div.graybox do
             form({ :method => 'post', :enctype => "multipart/form-data", 
                    :action => R(Upload, :signed => sign)}) do 
-              input :type => "file", :name => "file", :value  => "Browse"
-              input :type => "submit", :value => "Upload"
+              p.center do input :type => "file", :name => "file", :value  => "Browse" end
+              p.center do button :name  => "submit", :class => 'darkBtn' do span 'Upload' end end
             end
           end
           div.warning do
-            h2 "Restart"
+            h2 "Reset"
             div.graybox do
-              p "This will delete all your songs."
-              form({ :method => 'post', :action => R(Restart, :signed => sign)}) do 
-#             input :type => "image", :src  => "/assets/images/ruxtape_logo.jpg", :value => "Restart", :name  => "submit"
-              input :type => "submit", :value => "Restart", :name  => "submit"
+              p "This will reset your ruxtape by deleting all your songs and the admin account taking you back to the original setup."
+              form({ :method => 'post', :action => R(Restart, :signed => sign)}) do
+              p.center do button :name  => "submit", :class => 'redBtn' do span 'Reset' end  end 
               end
             end
           end
@@ -339,7 +338,7 @@ module Ruxtape::Views
           span.edit_song_button {"Edit Song"}
           form.delete({ :method => 'post', :action => R(DeleteSong, :signed => sign)}) do 
             input :type => "hidden", :name => "song_filename", :value => song.filename
-            input :type => "submit", :value => "Delete"
+            button :name  => "submit", :class => 'redBtn' do span 'Delete' end 
           end
         end  
       end
