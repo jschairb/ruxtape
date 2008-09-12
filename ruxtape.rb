@@ -25,6 +25,10 @@ module Ruxtape::Models
       def setup(openid)
         File.open(CONFIG_FILE, "w") { |f| YAML.dump(openid, f) }
       end
+      def write(configs)
+        values = self.values
+        File.open(CONFIG_FILE, "w") { |f| YAML.dump(values.merge(configs), f) }
+      end
       def admin?(ident)
         if setup?
           values[:openid] == ident
@@ -180,6 +184,8 @@ module Ruxtape::Controllers
 
   class UpdateConfig < R '/admin/update_config'
     def post
+      configs = { :openid => input.config_openid, :google => input.config_google }
+      Config.write(configs)
       redirect R(Admin)
     end
   end
@@ -188,7 +194,7 @@ module Ruxtape::Controllers
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
     def post
       unless Config.setup?
-        Config.setup(:openid => input.openid_identifier)
+        Config.setup(:openid => input.openid_identifier, :google => " ")
         redirect R(Login, :signed => sign)
       else
         redirect R(Index)
