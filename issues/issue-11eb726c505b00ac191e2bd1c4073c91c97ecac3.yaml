@@ -5,8 +5,8 @@ type: :feature
 component: Ruxtape
 release: 
 reporter: ch0wda <joshua.schairbaum@gmail.com>
-status: :in_progress
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2008-09-10 18:11:47.022475 Z
 references: []
 
@@ -20,3 +20,7 @@ log_events:
   - ch0wda <joshua.schairbaum@gmail.com>
   - changed status from unstarted to in_progress
   - I'm going to add this to the web interface.
+- - 2008-09-12 23:06:32.218814 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - closed with disposition fixed
+  - Added a config value, will output if the value is there.

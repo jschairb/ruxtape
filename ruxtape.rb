@@ -192,17 +192,14 @@ module Ruxtape::Controllers
 
   class Setup < R '/setup'
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
-<<<<<<< HEAD:ruxtape.rb
     def post
       unless Config.setup?
-        Config.setup(:openid => input.openid_identifier, :google => " ")
+        Config.setup(:openid => input.openid_identifier, :google => "")
         redirect R(Login, :signed => sign)
       else
         redirect R(Index)
       end
     end
-=======
->>>>>>> 4d0204c7efa8e6816091f510456a5f39f778a043:ruxtape.rb
   end
 
   class Upload < R '/admin/upload'
@@ -288,6 +285,8 @@ module Ruxtape::Views
           end
         end
       end
+
+      _google_analytics unless (Ruxtape::Models::Config.values[:google] == (nil || "") )
     end
   end
 
@@ -406,6 +405,15 @@ module Ruxtape::Views
     end
     div(:id =>'spectrum-container', :class => 'spectrum-container') do
       div(:class => 'spectrum-box') { div.spectrum {""} }
+    end
+  end
+
+  def _google_analytics
+    script :type => 'text/javascript' do 
+      "var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\"); document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));"
+    end
+    script :type => 'text/javascript' do 
+      "var pageTracker = _gat._getTracker(\"#{Ruxtape::Models::Config.values[:google]}\"); pageTracker._trackPageview();"
     end
   end
 end
