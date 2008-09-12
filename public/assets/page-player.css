@@ -62,6 +62,9 @@ ul.playlist li {
 
 ul.playlist li a {
  display:block;
+ width:87%;
+ overflow:hidden;
+ height:40px;
  text-decoration:none;
  font-weight:normal;
  color:#3F0000;
