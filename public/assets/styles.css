@@ -53,15 +53,13 @@ li.song .info strong { font-weight: 400; color: #808080; }
 .edit_song_button:hover { text-decoration:underline; color:#800000;}
 
 /* buttons */
-button { display:inline; border:0; cursor:pointer; padding:0 10px 2px 0px; text-align:center; margin:0 15px; border-radius:4px; -webkit-border-radius:4px; -moz-border-radius:4px;}
+button { display:inline; border:0px; cursor:pointer; padding:0 10px 2px 0px; text-align:center; margin:0 15px 0 15px; border-radius:4px; -webkit-border-radius:4px; -moz-border-radius:4px;}
 button span { position:relative; display:block; white-space:nowrap; padding:0 0 0 10px;}
 /* dark buttons*/
 button.darkBtn { background-color:#3f0000; font-size:0.9em;}
-button.darkBtn span { height:20px; line-height:20px; background-color:#3f0000; color:#fff; }
+button.darkBtn span { height:20px; line-height:20px; color:#fff; }
 button.darkBtn:hover { background-color:#800000;}
-button.darkBtn:hover span {	background-color:#800000;}
 /* red buttons */
 button.redBtn { background-color:#800000; font-size:0.9em;}
-button.redBtn span { height:20px; line-height:20px; background-color:#800000; color:#fff;}
+button.redBtn span { height:20px; line-height:20px; color:#fff;}
 button.redBtn:hover {	background-color:#3f0000;}
-button.redBtn:hover span { background-color:#3f0000;}
