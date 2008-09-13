@@ -25,6 +25,10 @@ module Ruxtape::Models
       def setup(openid)
         File.open(CONFIG_FILE, "w") { |f| YAML.dump({:openid => openid}, f) }
       end
+      def write(configs)
+        values = self.values
+        File.open(CONFIG_FILE, "w") { |f| YAML.dump(values.merge(configs), f) }
+      end
       def admin?(ident)
         if setup?
           values[:openid] == ident
@@ -109,6 +113,7 @@ module Ruxtape::Controllers
     def get
       return redirect('/setup') unless @state.identity
       @songs = Mixtape.playlist
+      @configs = Config.values
       render :admin
     end
   end
@@ -177,8 +182,24 @@ module Ruxtape::Controllers
     end
   end
 
+  class UpdateConfig < R '/admin/update_config'
+    def post
+      configs = { :openid => input.config_openid, :google => input.config_google }
+      Config.write(configs)
+      redirect R(Admin)
+    end
+  end
+
   class Setup < R '/setup'
     def get; Config.setup? ? render(:setup) : redirect(R(Index)); end
+    def post
+      unless Config.setup?
+        Config.setup(:openid => input.openid_identifier, :google => "")
+        redirect R(Login, :signed => sign)
+      else
+        redirect R(Index)
+      end
+    end
   end
 
   class Upload < R '/admin/upload'
@@ -198,6 +219,7 @@ module Ruxtape::Controllers
     def post
       return "invalid request" unless signed?
       if input.songs
+        p input.songs
         songs = input.songs.map { |filename| Song.new(File.join(Ruxtape::MP3_PATH, filename)) }
         songs.each_with_index { |song, i| song.update :tracknum => i+1 }
       end
@@ -267,6 +289,7 @@ module Ruxtape::Views
             @state.identity ? a("Logout", :href => R(Logout)) : a("Login", :href => "/setup")
           end
         end
+        _google_analytics unless (Ruxtape::Models::Config.values[:google] == (nil || "") )
       end
     end
   end
@@ -312,6 +335,16 @@ module Ruxtape::Views
                    :action => R(Upload, :signed => sign)}) do 
               p.center do input :type => "file", :name => "file", :value  => "Browse" end
               p.center do button :name  => "submit", :class => 'darkBtn' do span 'Upload' end end
+            end
+          end
+          h2 "Configurations"
+          div.graybox do 
+            form({ :method => 'post', :action => R(UpdateConfig, :signed => sign)}) do 
+              @configs.each do |key, value|
+                label "#{key.to_s.capitalize}", :for => "config_#{key}"
+                input :type => "text", :name => "config_#{key}", :value => value
+              end
+              input :type => "submit", :value => "Save"
             end
           end
           div.warning do
@@ -377,6 +410,15 @@ module Ruxtape::Views
     end
     div(:id =>'spectrum-container', :class => 'spectrum-container') do
       div(:class => 'spectrum-box') { div.spectrum {""} }
+    end
+  end
+
+  def _google_analytics
+    script :type => 'text/javascript' do 
+      "var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\"); document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));"
+    end
+    script :type => 'text/javascript' do 
+      "var pageTracker = _gat._getTracker(\"#{Ruxtape::Models::Config.values[:google]}\"); pageTracker._trackPageview();"
     end
   end
 end

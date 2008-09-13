@@ -5,8 +5,8 @@ type: :feature
 component: Ruxtape
 release: 
 reporter: ch0wda <joshua.schairbaum@gmail.com>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2008-09-10 19:55:11.032471 Z
 references: []
 
@@ -15,4 +15,8 @@ log_events:
 - - 2008-09-10 19:55:12.675881 Z
   - ch0wda <joshua.schairbaum@gmail.com>
   - created
+  - ""
+- - 2008-09-12 20:30:58.625667 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - closed with disposition fixed
   - ""

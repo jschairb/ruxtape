@@ -20,3 +20,4 @@ log_events:
   - ch0wda <joshua.schairbaum@gmail.com>
   - closed with disposition fixed
   - I had changed (and broken) the way it writes to the yaml file. should be all good now. Plus i shortened the file by a few lines!
+
