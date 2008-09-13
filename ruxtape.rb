@@ -337,14 +337,14 @@ module Ruxtape::Views
               p.center do button :name  => "submit", :class => 'darkBtn' do span 'Upload' end end
             end
           end
-          h2 "Configurations"
+          h2 "Configuration"
           div.graybox do 
             form({ :method => 'post', :action => R(UpdateConfig, :signed => sign)}) do 
               @configs.each do |key, value|
-                label "#{key.to_s.capitalize}", :for => "config_#{key}"
-                input :type => "text", :name => "config_#{key}", :value => value
-              end
-              input :type => "submit", :value => "Save"
+                p.center do label "#{key.to_s.capitalize}", :for => "config_#{key}"
+                input :type => "text", :name => "config_#{key}", :value => value end
+              end          
+              p.center do button :name  => "submit", :class => 'darkBtn' do span 'Save' end  end
             end
           end
           div.warning do

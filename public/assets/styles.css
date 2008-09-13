@@ -14,6 +14,7 @@ a:hover { color:#3F0000;}
 .center { text-align:center;}
 .file { margin-left: 1em; font-size: 18px; color: #CCCCCC; }
 form { display: inline; }
+label {margin: 0 6px;}
 input { padding:3px; margin:0px 0 0 0;}
 
 #header {width:100%; background: #3F0000; color: #FFFAFA; padding: 0; margin: 0 0 1px 0; height:102px; background-image:url('/assets/images/ruxtape_logo.jpg'); background-repeat:no-repeat;}

@@ -1,6 +1,6 @@
-a.sm2_link {text-decoration:none; padding:0 0 0 35px; background-image:url('/assets/images/inlineplay.png'); background-repeat:no-repeat;}
+a.sm2_link { text-decoration:none; padding:0 0 0 35px; background-image:url('/assets/images/inlineplay.png'); background-repeat:no-repeat; background-position: 0px 1px;}
 a.sm2_link:hover {text-decoration:none;}
-a.sm2_playing {color:#3f0000;text-decoration:none;background-image:url('/assets/images/inlinepause.png'); background-repeat:no-repeat;}
+a.sm2_playing { color:#3f0000; text-decoration:none; background-image:url('/assets/images/inlinepause.png'); background-repeat:no-repeat; background-position: 0px 1px;}
 a.sm2_playing:hover {text-decoration:none;}
-a.sm2_paused {color:#808080;text-decoration:none;background-image:url('/assets/images/inlineplay.png'); background-repeat:no-repeat;}
+a.sm2_paused {color:#808080; text-decoration:none; background-image:url('/assets/images/inlineplay.png'); background-repeat:no-repeat; background-position: 0px 1px;}
 a.sm2_paused:hover {color:#808080;text-decoration:none;}
