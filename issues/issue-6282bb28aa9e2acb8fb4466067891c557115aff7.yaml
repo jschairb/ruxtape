@@ -5,8 +5,8 @@ type: :feature
 component: Ruxtape
 release: 
 reporter: ch0wda <joshua.schairbaum@gmail.com>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2008-09-12 13:48:26.876316 Z
 references: []
 
@@ -16,3 +16,11 @@ log_events:
   - ch0wda <joshua.schairbaum@gmail.com>
   - created
   - ""
+- - 2008-09-12 23:22:59.690314 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - changed status from unstarted to in_progress
+  - Gonna make sure that all the directories are able to be written to.
+- - 2008-09-13 12:44:14.727928 Z
+  - ch0wda <joshua.schairbaum@gmail.com>
+  - closed with disposition fixed
+  - just a simple check for File.writable?

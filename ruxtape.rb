@@ -29,6 +29,7 @@ module Ruxtape::Models
         values = self.values
         File.open(CONFIG_FILE, "w") { |f| YAML.dump(values.merge(configs), f) }
       end
+      def writable?; File.writable?(CONFIG_FILE); end
       def admin?(ident)
         if setup?
           values[:openid] == ident
@@ -50,6 +51,7 @@ module Ruxtape::Models
         Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3") { |mp3| songs << Song.new(mp3) }
         songs.sort
       end
+      def writable?; Config.writable? && Song.writable?; end
       def song_count; Dir.glob("#{Ruxtape::MP3_PATH}/*.mp3").length; end
       def length 
         minutes, seconds = 0,0
@@ -72,16 +74,13 @@ module Ruxtape::Models
         self.title, self.artist, self.length, self.tracknum = mp3.tag.title, mp3.tag.artist, mp3.length, mp3.tag.tracknum
       end
     end
-
     def self.filename_to_path(filename); File.join(Ruxtape::MP3_PATH, filename); end
-
+    def self.writable?; File.writable?(Ruxtape::MP3_PATH); end
     def delete; File.delete(self.path); end
-
     def time
       minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
       "#{minutes}:#{seconds}"
     end
-
     def update(attrs)
       Mp3Info.open(self.path) do |mp3|
         mp3.tag.title = attrs[:title] if attrs[:title]
@@ -90,7 +89,6 @@ module Ruxtape::Models
       end
     end
     def url_path; "/songs/#{URI.escape(File.basename(path))}"; end
-
     def <=>(other)
       self.tracknum <=> other.tracknum
     end
@@ -100,11 +98,13 @@ end
 module Ruxtape::Controllers
   class Index < R '/'
     def get
-      if Config.setup? 
+      if Config.setup? && Mixtape.writable?
         @songs = Mixtape.playlist
         render(:index) 
-      else 
+      elsif Mixtape.writable?
         render(:setup)
+      else
+        render(:writable)
       end
     end
   end
@@ -315,6 +315,18 @@ module Ruxtape::Views
       form({ :method => 'get', :action => R(Login, :signed => sign)}) do
         input :type => "text", :name => "openid_identifier"
         button :name  => "submit", :class => 'darkBtn' do span 'Login' end
+      end
+    end
+  end
+
+  def writable
+    div.content! do 
+      h1 "System Problem"
+      p "Make sure these folders are writable by the process Ruxtape runs as:"
+      ul do 
+        @dirs.each do |dir|
+          li dir
+        end
       end
     end
   end
