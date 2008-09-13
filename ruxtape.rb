@@ -242,6 +242,11 @@ module Ruxtape::Views
         meta(:content => 'noindex, nofollow', :name => "robots")
         %w(jquery.js ui.core.js ui.sortable.js ruxtape.js).each do |lib|
           script(:type => 'text/javascript', :src => "/assets/#{lib}")
+          script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2-nodebug-jsmin.js')
+          script :type  => 'text/javascript' do "soundManager.url = '../../assets/soundmanager';"  end
+          script :type  => 'text/javascript' do
+            "var PP_CONFIG = {flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false,useFavIcon: false}"        
+          end
         end
       end
       body do
@@ -266,8 +271,7 @@ module Ruxtape::Views
     end
   end
 
-  def index
-    script(:type => 'text/javascript', :src => '/assets/soundmanager/soundmanager2.js')
+  def index    
     # The order of the following js calls is apparently quite critical to proper behaviour.
     script :type  => 'text/javascript' do
       "var PP_CONFIG = {flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false,useFavIcon: false}"
@@ -293,6 +297,9 @@ module Ruxtape::Views
   end
 
   def admin
+    link(:rel => 'stylesheet', :type => 'text/css',
+         :href => '/assets/inline-player.css', :media => 'screen' )
+    script(:type => 'text/javascript', :src => '/assets/soundmanager/inline-player.js')
     div.content! do 
       p.login { text "You are authenticated as #{@state.identity}." }
       h1 "Switch Up Your Tape"
@@ -333,7 +340,7 @@ module Ruxtape::Views
   def _song_admin(song)
     div.song do 
       div.info do 
-        h3 "#{song.artist} - #{song.title}"
+        h3 do a("#{song.artist} - #{song.title}", :href=> song.url_path, :class => 'sm2_link') end
         div.edit_song_controls do
           span.edit_song_button {"Edit Song"}
           form.delete({ :method => 'post', :action => R(DeleteSong, :signed => sign)}) do 
@@ -344,7 +351,7 @@ module Ruxtape::Views
       end
       div.edit_song do
         div.edit_song_form do
-          h6 "file - (#{song.filename})" 
+          h6 "file - (#{song.filename})"     
           form({ :method => 'post', :action => R(UpdateSong, :signed => sign)}) do 
             label 'Artist ', :for => 'song_artist'
             input :type => "text", :name => "song_artist", :value => song.artist

@@ -44,7 +44,7 @@ li.song .info strong { font-weight: 400; color: #808080; }
 .graybox { background-color: #eee;padding: 5px; margin:0 0 2px 0; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px;}
 .admin_left { margin: 0 10px 0 0; float:left; width: 250px;}
 .admin_list { margin: 0px 0 0 0; float:left; width: 650px;}
-.song h3 { display:block; width:450px; height:12px; overflow:hidden; padding:5px; margin:0px 0 5px 15px; line-height: 1em;}
+.song h3 { display:block; width:425px; height:14px; overflow:hidden; padding:5px; margin:0px 0 5px 15px; line-height: 1em;}
 .song h6 { padding:0px; margin:10px; line-height: 1em; color:#808080;}
 .edit_song_controls { display:block; position:absolute; top:5px; right:5px; height: 45px; width:200px; text-align:right;}
 .edit_song { display:block; margin: 0 0 0 90px; padding:0;}

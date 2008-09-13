@@ -12,9 +12,9 @@
 
 function SoundManager(smURL,smID) {
  
-  this.flashVersion = 8;           // Version of flash to require, either 8 or 9. Some API features require Flash 9.
-  this.debugMode = true;           // enable debugging output (div#soundmanager-debug, OR console if available + configured)
-  this.useConsole = true;          // use firebug/safari console.log()-type debug console if available
+  this.flashVersion = 9;           // Version of flash to require, either 8 or 9. Some API features require Flash 9.
+  this.debugMode = false;           // enable debugging output (div#soundmanager-debug, OR console if available + configured)
+  this.useConsole = false;          // use firebug/safari console.log()-type debug console if available
   this.consoleOnly = false;        // if console is being used, do not create/write to #soundmanager-debug
   this.waitForWindowLoad = false;  // force SM2 to wait for window.onload() before trying to call soundManager.onload()
   this.nullURL = 'data/null.mp3';  // path to "null" (empty) MP3 file, used to unload sounds (Flash 8 only)
