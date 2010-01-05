@@ -7,4 +7,3 @@ config/*
 config.ru
 config/deploy.rb
 tmp/restart.txt
-

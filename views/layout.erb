@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+  <head>
+    <title>Ruxtape</title>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/assets/styles.css" />
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/assets/page-player.css" />
+    <meta content="noindex, nofollow" name="robots" />
+
+    <% %w(jquery.js ui.core.js ui.sortable.js ruxtape.js).each do |lib| %>
+      <script type="text/javascript" charset="utf-8" src="/assets/<%= lib %>"></script>
+    <% end %>
+
+    <script type="text/javascript" charset="utf-8" src="/assets/soundmanager/soundmanager2-nodebug-jsmin.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      soundManager.url = '../../assets/soundmanager';
+      var PP_CONFIG = { flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false, useFavIcon: false }
+    </script>
+
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="header">
+        <!-- <div class="manage_button"> -->
+        <!--   <a href="/">Manage</a> -->
+        <!-- </div> -->
+        <!-- <div class="manage_button"> -->
+        <!--   <a href="/">Listen</a> -->
+        <!-- </div> -->
+      </div>
+      <div class="pinstripe"></div>
+      <%= yield %>
+      <div id="footer">
+        <a href="http://github.com/jschairb/ruxtape">Ruxtape Code</a>
+      </div>
+    </div>
+  </body>
+</html>
