@@ -10,7 +10,7 @@
 
 <ul class="playlist">
   <% @mixtape.songs.each do |song| %>
-    <li><a href="<%= song.url_path %>"><%= song.artist %> - <%= song.title %></a></li>
+    <li><a href="<%= song_url(song) %>"><%= song.artist %> - <%= song.title %></a></li>
   <% end %>
 </ul>
 

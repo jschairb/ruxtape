@@ -4,28 +4,23 @@
 <html>
   <head>
     <title>Ruxtape</title>
-    <link rel="shortcut icon" href="/assets/images/favicon.ico" />
-    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/assets/styles.css" />
-    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/assets/page-player.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/stylesheets/styles.css" />
+    <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="/stylesheets/page-player.css" />
     <meta content="noindex, nofollow" name="robots" />
 
     <% %w(jquery.js ui.core.js ui.sortable.js ruxtape.js).each do |lib| %>
-      <script type="text/javascript" charset="utf-8" src="/assets/<%= lib %>"></script>
+      <script type="text/javascript" charset="utf-8" src="/javascripts/<%= lib %>"></script>
     <% end %>
 
-    <script type="text/javascript" charset="utf-8" src="/assets/soundmanager/soundmanager2-nodebug-jsmin.js"></script>
-    <script type="text/javascript" charset="utf-8">
-      soundManager.url = '../../assets/soundmanager';
-      var PP_CONFIG = { flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false, useFavIcon: false }
-    </script>
-
+    <script type="text/javascript" charset="utf-8" src="/javascripts/soundmanager/soundmanager2-nodebug-jsmin.js"></script>
   </head>
   <body>
     <div id="wrapper">
       <div id="header">
         <% if true %>
           <div class="manage_button">
-            <a href="/">Manage</a>
+            <a href="/admin">Manage</a>
           </div>
           <div class="manage_button">
             <a href="/">Listen</a>

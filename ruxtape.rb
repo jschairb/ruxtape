@@ -25,6 +25,10 @@ helpers do
   def url(path='')
     [base_url, path].join('/')
   end
+
+  def song_url(song)
+    [base_url, "songs", song.filename].join('/')
+  end
 end
 
 get '/' do 
@@ -32,6 +36,5 @@ get '/' do
 end
 
 get '/admin' do 
-  # params.inspect
   erb :admin
 end

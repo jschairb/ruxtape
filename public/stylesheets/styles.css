@@ -17,7 +17,7 @@ form { display: inline; }
 label {margin: 0 6px;}
 input { padding:3px; margin:0px 0 0 0;}
 
-#header {width:100%; background: #3F0000; color: #FFFAFA; padding: 0; margin: 0 0 1px 0; height:102px; background-image:url('/assets/images/ruxtape_logo.jpg'); background-repeat:no-repeat;}
+#header {width:100%; background: #3F0000; color: #FFFAFA; padding: 0; margin: 0 0 1px 0; height:102px; background-image:url('/images/ruxtape_logo.jpg'); background-repeat:no-repeat;}
 .manage_button { float:right; display:block; background-color:#800000; margin:30px 15px 0 0; color: #fff; width:90px; height:40px; border-radius:6px; -webkit-border-radius:6px; -moz-border-radius:6px;}
 .manage_button a { display:block; width:90px; height:35px; text-align:center; color: #fff; font-size: 20px; margin: 9px auto; text-decoration:none;}
 .pinstripe { display:block; width:100%; background-color:#3f0000; height:4px; border:0px solid #fff; margin:0 0 1px 0px; padding:0;}

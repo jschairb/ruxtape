@@ -7,6 +7,10 @@ class Song
     _get_mp3_info
   end
 
+  def <=>(other)
+    self.tracknum <=> other.tracknum
+  end
+
   def filename
     File.basename(@path)
   end
@@ -16,16 +20,12 @@ class Song
     "#{minutes}:#{seconds}"
   end
 
-  def url_path
-    "/songs/#{URI.escape(File.basename(@path))}"
-  end
-
   def _get_mp3_info
     Mp3Info.open(@path) do |mp3|
-      %w(title artist length tracknum).each do |attr|
+      %w(title artist tracknum).each do |attr|
         self.send("#{attr}=", mp3.tag.send(attr.intern))
       end
+      self.length = mp3.length
     end
   end
-
 end

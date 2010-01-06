@@ -1,0 +1,72 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/inline-player.css" media="screen" />
+<script type="text/javascript" src="/javascripts/soundmanager/inline-player.js"></script>
+
+<div id="content">
+  <p class="login">You are authenticated as #{@state.identity}</p>
+  <h1>Switch Up Your Tape</h1>
+  <p>You can upload another song, rearrange your mix, or blow it all away.</p>
+  <div class="admin_area">
+    <div class="admin_left">
+      <h2>Upload a New Jam</h2>
+      <div class="graybox">
+        <form action="/admin/songs" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+          <p class="center"><input type="file" name="file" value="Browse" /></p>
+          <p class="center"><button name="submit" class="darkBtn"><span>Upload</span></button></p>
+        </form>
+      </div>
+      <h2>Configuration</h2>
+      <div class="graybox">
+        <form action="/admin/configs" method="post">
+          <p class="center">
+            <label for="config_#{key}">#{key.to_s.capitalize}</label>
+            <input type="text" name="config_#{key}" value="value" />
+          </p>
+        </form>
+      </div>
+      <div class="warning">
+        <h2>Reset</h2>
+        <p>This will reset your Ruxtape by deleting all your songs and the admin account, returning the application to a blank slate.</p>
+        <form action="/admin/restart" method="post">
+          <p class="center"><button name="submit" class="redBtn"><span>Reset</span></button></p>
+        </form>
+      </div>
+    </div>
+    <div class="admin_list">
+      <h2>Edit Playlist</h2>
+      <ul class="sorter" id="sorter">
+        <% @mixtape.songs.each do |song| %>
+          <li class="sortable" id="songs_<%= song.filename %>">
+            <div class="song">
+              <div class="info">
+                <h3>
+                  <a href="<%= song_url(song)%>" class="sm2_link"><%= song.artist %> - <%= song.title %></a>
+                </h3>
+                <div class="edit_song_controls">
+                  <span class="edit_song_button">Edit Song</span>
+                  <form class="delete" method="post" action="/admin/songs/#{song}">
+                    <input type="hidden" name="song_filename" value="<%= song.filename %>" />
+                    <button name="submit" class="redBtn"><span>Delete</span></button>
+                  </form>
+                </div>
+              </div>
+              <div class="edit_song">
+                <div class="edit_song_form">
+                  <h6>file - <%= song.filename%></h6>
+                  <form method="post" action="/admin/songs/">
+                    <label for="song_artist">Artist</label>
+                    <input type="text" name="song_artist" value="<%= song.artist %>" />
+                    <label for="song_title">Title</label>
+                    <input type="text" name="song_title" value="<%= song.title %>" />
+                    <input type="hidden" name="song_filename" value="<%= song.filename %>" />
+                    <button name="submit" class="darkBtn"><span>Save</span></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      <span id="signature">#{sign}</span>
+    </div>
+  </div>
+</div>
