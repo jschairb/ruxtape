@@ -23,17 +23,27 @@
   <body>
     <div id="wrapper">
       <div id="header">
-        <!-- <div class="manage_button"> -->
-        <!--   <a href="/">Manage</a> -->
-        <!-- </div> -->
-        <!-- <div class="manage_button"> -->
-        <!--   <a href="/">Listen</a> -->
-        <!-- </div> -->
+        <% if true %>
+          <div class="manage_button">
+            <a href="/">Manage</a>
+          </div>
+          <div class="manage_button">
+            <a href="/">Listen</a>
+          </div>
+        <% end %>
+        <div id="title">Ruxtape, sucka</div>
+        <div id="subtitle">10 songs, 50:65</div>
       </div>
       <div class="pinstripe"></div>
       <%= yield %>
       <div id="footer">
         <a href="http://github.com/jschairb/ruxtape">Ruxtape Code</a>
+        &nbsp;&raquo;&nbsp;
+        <% if true %>
+          <a href="/logout">Logout</a>
+        <% else %>
+          <a href="/login">Login</a>
+        <% end %>
       </div>
     </div>
   </body>

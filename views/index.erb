@@ -1,5 +1,37 @@
+<script type="text/javascript">
+  var PP_CONFIG = {flashVersion: 9,usePeakData: true,useWaveformData: false,useEQData: false,useFavIcon: false}
+</script>
+
+<script type="text/javascript" src="/assets/soundmanager/page-player.js"></script>
+<script type="text/javascript">
+  soundManager.url = '../../assets/soundmanager';
+</script>
 <div id="warning">This site requires javascript, please enable and carry on.</div>
+
 <ul class="playlist">
-    <li>Fool</li>
-    <li>2</li>
+  <li><a href="/songs/09 Glory of Love.mp3">Peter Cetera - Glory of Love</a></li>
 </ul>
+
+<div id="control-template">
+  <div class="controls">
+    <div class="statusbar">
+      <div class="loading"></div>
+      <div class="position"></div>
+    </div>
+  </div>
+  <div class="timing">
+    <div id="sm2_timing" class="timing-data">
+      <span class="sm2_position">%s1</span>
+      <span class="sm2_total"> / %s2</span>
+    </div>
+  </div>
+  <div class="peak">
+    <div class="peak-box">
+      <span class="l"></span>
+      <span class="r"></span>
+    </div>
+  </div>
+</div>
+<div id="spectrum-container" class="spectrum-container">
+  <div class="spectrum-box"><div class="spectrum"></div></div>
+</div>

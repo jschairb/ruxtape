@@ -1,7 +1,7 @@
-require 'rubygems'
-require 'rack'
 require 'ruxtape'
 
-run Ruxtape
+set :environment, :production
+
+run Sinatra::Application
 
 
