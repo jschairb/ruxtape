@@ -9,7 +9,9 @@
 <div id="warning">This site requires javascript, please enable and carry on.</div>
 
 <ul class="playlist">
-  <li><a href="/songs/09 Glory of Love.mp3">Peter Cetera - Glory of Love</a></li>
+  <% @mixtape.songs.each do |song| %>
+    <li><a href="<%= song.url_path %>"><%= song.artist %> - <%= song.title %></a></li>
+  <% end %>
 </ul>
 
 <div id="control-template">

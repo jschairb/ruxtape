@@ -32,7 +32,7 @@
           </div>
         <% end %>
         <div id="title">Ruxtape, sucka</div>
-        <div id="subtitle">10 songs, 50:65</div>
+        <div id="subtitle"><%= @mixtape.songs.length %> songs, <%= @mixtape.length %></div>
       </div>
       <div class="pinstripe"></div>
       <%= yield %>

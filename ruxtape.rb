@@ -1,8 +1,16 @@
 $LOAD_PATH << File.join(Dir.getwd, 'lib')
 
+Dir.glob(File.join(File.dirname(__FILE__),"/vendor/*")).each do |lib|
+  $:.unshift File.join(lib, "/lib")
+end
+
 require 'rubygems'
 require 'sinatra'
 require 'mixtape'
+require 'song'
+require 'mp3info'
+require 'fileutils'
+require 'uri'
 
 before do 
   @mixtape = Mixtape.new
