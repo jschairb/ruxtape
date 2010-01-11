@@ -11,6 +11,10 @@ class Song
     self.tracknum <=> other.tracknum
   end
 
+  def delete
+    File.delete(@path)
+  end
+
   def filename
     File.basename(@path)
   end
@@ -18,6 +22,14 @@ class Song
   def time
     minutes = (length/60).to_i; seconds = (((length/60) - minutes) * 60).to_i
     "#{minutes}:#{seconds}"
+  end
+
+  def update(attributes)
+    Mp3Info.open(self.path) do |song|
+      mp3.tag.title = attributes[:title]
+      mp3.tag.artist = attributes[:artist]
+      mp3.tag.tracknum = attributes[:tracknum].to_i
+    end
   end
 
   def _get_mp3_info

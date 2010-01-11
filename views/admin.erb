@@ -43,8 +43,8 @@
                 </h3>
                 <div class="edit_song_controls">
                   <span class="edit_song_button">Edit Song</span>
-                  <form class="delete" method="post" action="/admin/songs/#{song}">
-                    <input type="hidden" name="song_filename" value="<%= song.filename %>" />
+                  <form class="delete" method="post" action="/admin/songs/<%= URI.escape(song.filename) %>">
+                    <input type="hidden" name="_method" value="delete" />
                     <button name="submit" class="redBtn"><span>Delete</span></button>
                   </form>
                 </div>

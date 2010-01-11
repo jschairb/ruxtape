@@ -50,6 +50,13 @@ end
 post '/admin/songs' do 
   @path = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs', @params[:file][:filename])
   cp(@params[:file][:tempfile].path, @path)
-  # Song.new(@path.update(:tracknum => Mixtape.songs.length)
+  Song.new(@path).update(:tracknum => @mixtape.songs.length)
+  redirect admin_url
+end
+
+delete '/admin/songs/:song_name' do 
+  @path = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs', @params[:song_name])
+  song = Song.new(@path)
+  song.delete
   redirect admin_url
 end
