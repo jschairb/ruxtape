@@ -48,15 +48,29 @@ get '/admin' do
 end
 
 post '/admin/songs' do 
-  @path = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs', @params[:file][:filename])
-  cp(@params[:file][:tempfile].path, @path)
-  Song.new(@path).update(:tracknum => @mixtape.songs.length)
+  song = Song.new(@params[:file][:filename])
+  cp(@params[:file][:tempfile].path, song.path)
+  song.update(:tracknum => @mixtape.songs.length)
   redirect admin_url
 end
 
+put '/admin/songs/:song_name' do 
+  song = Song.find(@params[:song_name])
+  song.update(:artist => @params[:song_artist], :title => @params[:song_title])
+  redirect admin_url
+end
+
+post '/admin/songs/reorder' do 
+  songs = @params[:songs].map do |filename| 
+    path = File.join(MP3Path, filename)
+    Song.find(path) 
+  end
+  songs.each_with_index { |song, i| song.update :tracknum => i+1 }
+  "ok"
+end
+
 delete '/admin/songs/:song_name' do 
-  @path = File.join(File.expand_path(File.dirname(__FILE__)), 'public', 'songs', @params[:song_name])
-  song = Song.new(@path)
+  song = Song.find(@params[:song_name])
   song.delete
   redirect admin_url
 end

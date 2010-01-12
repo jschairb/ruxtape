@@ -14,7 +14,7 @@ $(document).ready(function(){
         $("#sorter").sortable({
             axis: 'y',
             stop: function(e,ui){
-                $.post("/admin/reorder", 
+                $.post("/admin/songs/reorder", 
                        $("#sorter").sortable("serialize", {expression: /(songs)_(.+)/})+signature()) }});
     }
 

@@ -1,10 +1,7 @@
 class Mixtape
-  MP3_PATH = File.join(File.expand_path(File.dirname(__FILE__)), '..','public', 'songs')
 
   def songs
-    songs = []
-    Dir.glob("#{MP3_PATH}/*.mp3") { |song| songs << Song.new(song) }
-    return songs.sort
+    Song.all
   end
 
   def length
