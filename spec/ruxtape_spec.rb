@@ -20,4 +20,10 @@ describe 'Ruxtape' do
       last_response.should be_ok
     end
   end
+
+  describe "/admin" do 
+    it "redirects if not logged_in?" do 
+      get '/admin'
+    end
+  end
 end

@@ -18,7 +18,7 @@
   <body>
     <div id="wrapper">
       <div id="header">
-        <% if true %>
+        <% if logged_in? %>
           <div class="manage_button">
             <a href="/admin">Manage</a>
           </div>
@@ -34,7 +34,7 @@
       <div id="footer">
         <a href="http://github.com/jschairb/ruxtape">Ruxtape Code</a>
         &nbsp;&raquo;&nbsp;
-        <% if true %>
+        <% if logged_in? %>
           <a href="/logout">Logout</a>
         <% else %>
           <a href="/login">Login</a>
