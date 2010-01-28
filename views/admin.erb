@@ -17,10 +17,12 @@
       <h2>Configuration</h2>
       <div class="graybox">
         <form action="/admin/configs" method="post">
-          <p class="center">
-            <label for="config_#{key}">#{key.to_s.capitalize}</label>
-            <input type="text" name="config_#{key}" value="value" />
-          </p>
+          <% @configs.each do |attr, value| %>
+            <p class="center">
+              <label for="config_<%= attr %>"><%= key.to_s.capitalize %></label>
+              <input type="text" name="config_<%= attr %>" value="<%= value %>" />
+            </p>
+          <% end %>
         </form>
       </div>
       <div class="warning">

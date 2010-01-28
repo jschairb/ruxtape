@@ -9,6 +9,7 @@ end
 require 'rubygems'
 require 'sinatra'
 
+require 'configs'
 require 'mixtape'
 require 'song'
 require 'mp3info'
@@ -30,6 +31,13 @@ before do
 end
 
 helpers do 
+  def ensure_setup
+    if Configs.setup?
+    else
+      redirect setup_url
+    end
+  end
+  
   def base_url
     base = "http://#{Sinatra::Application.host}"
     port = Sinatra::Application.port == 80 ? base : base << ":#{Sinatra::Application.port}"
@@ -39,29 +47,35 @@ helpers do
     !session[:user].nil?
   end
 
-  def url(path='')
-    [base_url, path].join('/')
+  def url(path='', file=nil)
+    [base_url, path, file].join('/')
   end
 
   def admin_url
-    [base_url, "admin"].join("/")
+    url("admin")
   end
 
   def login_url
-    [base_url, "login"].join("/")
+    url("login")
+  end
+
+  def setup_url
+    url("setup")
   end
 
   def song_url(song)
-    [base_url, "songs", song.filename].join('/')
+    url("songs", song.filename)
   end
 end
 
 get '/' do 
+  ensure_setup
   erb :index
 end
 
 get '/admin' do 
   login_required
+  @configs = Configs.attributes
   erb :admin
 end
 
@@ -77,6 +91,15 @@ end
 get '/logout' do 
   session[:user] = nil
   redirect url
+end
+
+get '/setup' do 
+  erb :setup
+end
+
+post '/setup' do 
+  Configs.update_attributes(@params[:configs])
+  redirect admin_url
 end
 
 post '/admin/songs' do 
